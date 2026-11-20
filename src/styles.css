@@ -297,6 +297,7 @@ button { color: inherit; }
 .switch input:checked + span { background: var(--olive); }
 .switch input:checked + span::after { transform: translateX(17px); }
 .switch input:disabled + span { opacity: .55; cursor: not-allowed; }
+.switch input:focus-visible + span { outline: 2px solid #69785a; outline-offset: 4px; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 25px; }
 .search-panel { align-self: start; margin-top: 8vh; }
 .search-panel-head { display: flex; align-items: center; justify-content: space-between; }
