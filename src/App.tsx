@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { FormEvent } from "react";
+import type { FormEvent, ReactNode } from "react";
 import {
   BrowserRouter,
   Link,
@@ -420,7 +420,7 @@ function Newsletter() {
   return <section className="newsletter-section"><div><span className="eyebrow">A note from Aura</span><h2>Be the first to<br /><em>hear what's coming.</em></h2></div><form onSubmit={submit}><label htmlFor="newsletter-email">Your email address</label><div className="newsletter-control"><input id="newsletter-email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email address" /><button aria-label="Join newsletter" type="submit">↗</button></div><p>Optional updates only. You can unsubscribe at any time. <Link to="/policies/privacy">Privacy policy</Link></p>{status && <p role="status" className="form-status">{status}</p>}</form></section>;
 }
 
-function PageHero({ eyebrow, title, intro, image, imageAlt = "" }: { eyebrow: string; title: string; intro: string; image?: string; imageAlt?: string }) {
+function PageHero({ eyebrow, title, intro, image, imageAlt = "" }: { eyebrow: string; title: ReactNode; intro: string; image?: string; imageAlt?: string }) {
   return <section className={image ? "page-hero page-hero--image" : "page-hero"}>{image && <><img src={image} alt={imageAlt} /><div className="page-hero-overlay" /></>}<div className="page-hero-copy"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{intro}</p></div></section>;
 }
 
