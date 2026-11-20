@@ -67,7 +67,7 @@ There is no live PayFast integration or payment credential in this repository.
 
 ## Compliance and governance
 
-See [compliance/REGULATORY-CONTROL-MAP.md](compliance/REGULATORY-CONTROL-MAP.md) for the baseline legal and operational controls, country applicability triggers, evidence requirements and production-readiness checklist.
+See the internal [regulatory and control map](compliance/REGULATORY-CONTROL-MAP.md), [country addendum template](compliance/MARKET-ADDENDUM-TEMPLATE.md), [data processing inventory](compliance/DATA-PROCESSING-INVENTORY.md) and [supplier register](compliance/SUPPLIER-REGISTER.md) for the legal and operational controls, applicability triggers, evidence requirements and launch checklist.
 
 The policy pages are working drafts, not legal advice and not a declaration of worldwide compliance. Final legal disclosures require Aura's verified entity details, actual service rules, vendor list, customer markets and country-specific legal review. South Africa and Zimbabwe are the initial markets considered in the control map; other markets require additional assessment.
 
