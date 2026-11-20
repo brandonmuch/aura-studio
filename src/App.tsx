@@ -1,4 +1,5 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import type { FormEvent } from "react";
 import {
   BrowserRouter,
   Link,
@@ -152,7 +153,7 @@ const policyContent: Record<string, { title: string; eyebrow: string; intro: str
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [pathname]);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [pathname]);
   return null;
 }
 
