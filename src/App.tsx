@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import {
   BrowserRouter,
@@ -11,6 +11,31 @@ import {
   useParams,
 } from "react-router-dom";
 import BlurText from "./components/BlurText";
+
+type CartLine = { slug: string; quantity: number };
+type CartContextValue = { items: CartLine[]; addItem: (slug: string) => void; removeItem: (slug: string) => void };
+const CartContext = createContext<CartContextValue | null>(null);
+const ANNOUNCEMENT = ""; // Add a current promotion or store update here. Leave blank to hide the bar.
+
+function useCart() {
+  const value = useContext(CartContext);
+  if (!value) throw new Error("useCart must be used inside CartProvider");
+  return value;
+}
+
+function CartProvider({ children }: { children: ReactNode }) {
+  const [items, setItems] = useState<CartLine[]>(() => {
+    if (typeof window === "undefined") return [];
+    try { return JSON.parse(window.localStorage.getItem("aura-cart") || "[]") as CartLine[]; }
+    catch { return []; }
+  });
+  useEffect(() => { window.localStorage.setItem("aura-cart", JSON.stringify(items)); }, [items]);
+  const addItem = (slug: string) => setItems((current) => current.some((item) => item.slug === slug)
+    ? current.map((item) => item.slug === slug ? { ...item, quantity: item.quantity + 1 } : item)
+    : [...current, { slug, quantity: 1 }]);
+  const removeItem = (slug: string) => setItems((current) => current.filter((item) => item.slug !== slug));
+  return <CartContext.Provider value={{ items, addItem, removeItem }}>{children}</CartContext.Provider>;
+}
 
 type Product = {
   slug: string;
@@ -175,7 +200,7 @@ function Header() {
 
   return (
     <>
-      <div className="announcement-bar">A considered experience, from the first detail to the last.</div>
+      {ANNOUNCEMENT.trim() && <div className="announcement-bar" role="status">{ANNOUNCEMENT}</div>}
       <header className="site-header">
         <Link className="brand" to="/" aria-label="Aura Studio home">
           <span className="brand-main">AURA</span><span className="brand-sub">STUDIO</span>
@@ -192,7 +217,7 @@ function Header() {
           <NavLink to="/contact">Contact</NavLink>
           <div className="nav-actions">
             <button className="icon-button" aria-label="Search" onClick={() => setSearchOpen(true)}>⌕</button>
-            <NavLink className="bag-link" to="/cart" aria-label="Shopping bag">Bag <span>↗</span></NavLink>
+            <NavLink className="bag-link" to="/cart" aria-label="Shopping bag">Bag <span>{useCart().items.reduce((total, item) => total + item.quantity, 0)}</span></NavLink>
           </div>
         </nav>
       </header>
@@ -319,6 +344,7 @@ function AppShell() {
 
   return (
     <BrowserRouter>
+      <CartProvider>
       <ScrollToTop />
       <Header />
       <Routes>
@@ -340,6 +366,7 @@ function AppShell() {
       <Footer onCookieSettings={openPreferences} />
       <CookieConsent onManage={openPreferences} />
       <CookiePreferences open={preferencesOpen} onClose={() => setPreferencesOpen(false)} />
+      </CartProvider>
     </BrowserRouter>
   );
 }
@@ -354,7 +381,7 @@ function HomePage() {
           <span className="eyebrow">Aura Studio</span>
           <BlurText text="Luxury, without announcement." className="hero-title" delay={75} />
           <p>Private transfers. Considered clothing. Restorative spa experiences.</p>
-          <Link className="button button-cream" to="/about">Explore the experience <span>↗</span></Link>
+          <Link className="button button-cream" to="/clothing">Shop the collection <span>↗</span></Link>
         </div>
         <div className="hero-caption"><span>01 / 03</span><span>Thoughtfully considered</span></div>
       </section>
@@ -421,7 +448,7 @@ function Newsletter() {
 }
 
 function PageHero({ eyebrow, title, intro, image, imageAlt = "" }: { eyebrow: string; title: ReactNode; intro: string; image?: string; imageAlt?: string }) {
-  return <section className={image ? "page-hero page-hero--image" : "page-hero"}>{image && <><img src={image} alt={imageAlt} /><div className="page-hero-overlay" /></>}<div className="page-hero-copy"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{intro}</p></div></section>;
+  return <section className={image ? "page-hero page-hero--image page-hero--full" : "page-hero page-hero--full"}>{image && <><img src={image} alt={imageAlt} /><div className="page-hero-overlay" /></>}<div className="page-hero-copy"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{intro}</p></div></section>;
 }
 
 function TransfersPage() {
@@ -433,15 +460,16 @@ function ClothingPage() {
   const [filter, setFilter] = useState("All");
   const categories = ["All", "Clothing"];
   const visible = products.filter((product) => filter === "All" || product.category === filter);
-  return <main><PageHero eyebrow="Aura Clothing" title={<>Wear your ease.<br /><em>Move with intention.</em></>} intro="A quieter approach to style. Thoughtful silhouettes and considered everyday pieces." image={ASSETS.hero} imageAlt="Editorial clothing image from the temporary template set" /><section className="catalogue-section section-pad"><div className="catalogue-heading"><div><span className="eyebrow">The collection</span><h2>Preview the<br /><em>visual direction.</em></h2></div><div className="catalogue-tools"><span>Collection launch details to follow</span><div className="filter-tabs" role="group" aria-label="Filter collection">{categories.map((category) => <button className={filter === category ? "is-active" : ""} onClick={() => setFilter(category)} key={category}>{category}</button>)}</div></div></div><div className="product-grid">{visible.map((product, index) => <article className="product-card" key={product.slug}><Link to={`/product/${product.slug}`} className="product-image"><img src={product.image} alt={product.note} loading="lazy" /><span className="product-index">0{index + 1}</span></Link><div className="product-card-meta"><div><h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3><p>Preview image · product details coming soon</p></div><button className={saved.includes(product.slug) ? "save-button is-saved" : "save-button"} onClick={() => setSaved((items) => items.includes(product.slug) ? items.filter((item) => item !== product.slug) : [...items, product.slug])} aria-label={saved.includes(product.slug) ? "Remove from saved items" : "Save item"}>{saved.includes(product.slug) ? "♥" : "♡"}</button></div></article>)}</div><p className="catalogue-note">These are temporary template images for layout review only. Aura product photography, names, sizes, stock and pricing must be added before shopping is enabled.</p></section></main>;
+  return <main><PageHero eyebrow="Aura Clothing" title={<>Wear your ease.<br />Move with intention.</>} intro="Explore considered pieces designed for everyday wear." image={ASSETS.hero} imageAlt="Editorial clothing image from the temporary template set" /><section className="catalogue-section section-pad"><div className="catalogue-heading"><div><span className="eyebrow">Shop the collection</span><h2>Clothing</h2></div><div className="catalogue-tools"><span>New pieces will be added as the collection is released.</span><div className="filter-tabs" role="group" aria-label="Filter collection">{categories.map((category) => <button className={filter === category ? "is-active" : ""} onClick={() => setFilter(category)} key={category}>{category}</button>)}</div></div></div><div className="product-grid">{visible.map((product, index) => <article className="product-card" key={product.slug}><Link to={`/product/${product.slug}`} className="product-image"><img src={product.image} alt={product.note} loading="lazy" /><span className="product-index">0{index + 1}</span></Link><div className="product-card-meta"><div><h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3><p>View product details</p></div><button className={saved.includes(product.slug) ? "save-button is-saved" : "save-button"} onClick={() => setSaved((items) => items.includes(product.slug) ? items.filter((item) => item !== product.slug) : [...items, product.slug])} aria-label={saved.includes(product.slug) ? "Remove from saved items" : "Save item"}>{saved.includes(product.slug) ? "♥" : "♡"}</button></div></article>)}</div><p className="catalogue-note">The current images are temporary design references. Final product photography, descriptions, sizes, stock and prices will be loaded before orders open.</p></section></main>;
 }
 
 function ProductPage() {
   const { slug } = useParams();
   const product = products.find((item) => item.slug === slug);
   const navigate = useNavigate();
+  const { addItem } = useCart();
   if (!product) return <NotFoundPage />;
-  return <main><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span><Link to="/clothing">Clothing</Link><span>/</span><span>{product.name}</span></div><section className="product-detail"><div className="product-detail-image"><img src={product.image} alt={product.note} /></div><div className="product-detail-copy"><span className="eyebrow">Aura Clothing · Preview item</span><h1>{product.name}</h1><p className="product-description">{product.description}</p><p className="catalogue-note">{product.note}</p><div className="product-detail-rule" /><p>Product information, available sizes, materials, stock and pricing will be published once the Aura collection is approved.</p><button className="button button-dark" onClick={() => navigate("/contact")}>Enquire about the collection <span>↗</span></button></div></section></main>;
+  return <main><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span><Link to="/clothing">Clothing</Link><span>/</span><span>{product.name}</span></div><section className="product-detail"><div className="product-detail-image"><img src={product.image} alt={product.note} /></div><div className="product-detail-copy"><span className="eyebrow">Aura Clothing</span><h1>{product.name}</h1><p className="product-description">{product.description}</p><div className="product-detail-rule" /><p className="product-price-pending">Price and product options will be displayed here.</p><p className="catalogue-note">This is a storefront preview. Final product details, size options, stock and prices are being prepared. Orders will open once the catalogue and secure checkout are connected.</p><button className="button button-dark" onClick={() => { addItem(product.slug); navigate("/cart"); }}>Add to bag <span>↗</span></button></div></section></main>;
 }
 
 function SpaPage() {
@@ -493,11 +521,14 @@ function TrustCard({ title, copy, items }: { title: string; copy: string; items:
 }
 
 function CartPage() {
-  return <main className="empty-state section-pad"><span className="eyebrow">Your bag</span><h1>Nothing here<br /><em>just yet.</em></h1><p>The clothing collection is still in preview. Product details, prices and live stock will be added before the bag and checkout are enabled.</p><Link className="button button-dark" to="/clothing">Explore clothing <span>↗</span></Link></main>;
+  const { items, removeItem } = useCart();
+  const cartProducts = items.map((line) => ({ ...line, product: products.find((product) => product.slug === line.slug) })).filter((line) => line.product);
+  if (cartProducts.length === 0) return <main className="empty-state section-pad"><span className="eyebrow">Your bag</span><h1>Your bag is empty.</h1><p>Explore the clothing collection and add pieces to your bag.</p><Link className="button button-dark" to="/clothing">Shop clothing <span>↗</span></Link></main>;
+  return <main className="cart-page section-pad"><div className="cart-heading"><span className="eyebrow">Your bag</span><h1>Shopping bag</h1></div><div className="cart-lines">{cartProducts.map((line) => <article className="cart-line" key={line.slug}><img src={line.product!.image} alt={line.product!.name} /><div><h2>{line.product!.name}</h2><p>Quantity: {line.quantity}</p><p className="product-price-pending">Price to be confirmed</p><button className="text-link" onClick={() => removeItem(line.slug)}>Remove</button></div></article>)}</div><div className="cart-summary"><p>Final prices, delivery and taxes will be shown before payment.</p><Link className="button button-dark" to="/checkout">Continue to checkout <span>↗</span></Link></div></main>;
 }
 
 function CheckoutPage() {
-  return <main className="empty-state section-pad"><span className="eyebrow">Secure checkout</span><h1>Checkout will<br /><em>open soon.</em></h1><p>Payment processing is not connected yet. The intended flow uses a hosted payment page through the chosen provider, with server-side confirmation before an order is marked as paid.</p><Link className="button button-dark" to="/clothing">Return to clothing <span>↗</span></Link></main>;
+  return <main className="empty-state section-pad"><span className="eyebrow">Secure checkout</span><h1>Checkout is being prepared.</h1><p>Peach Payments will power the hosted card payment journey. Live checkout will be enabled once product prices, stock, delivery rules and server-side payment verification are configured.</p><Link className="button button-dark" to="/cart">Return to your bag <span>↗</span></Link></main>;
 }
 
 function PolicyPage() {
