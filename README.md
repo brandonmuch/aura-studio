@@ -61,9 +61,9 @@ Do not accept live orders or bookings until backend endpoints, server-side valid
 
 ## Payments
 
-The intended first-launch architecture is a South African Aura merchant using a PayFast-hosted card payment page, subject to final merchant onboarding and confirmation. Aura's backend must calculate order totals, create pending records and validate PayFast server notifications before treating an order as paid. Card numbers and CVVs must never be collected by the Aura storefront.
+The intended first-launch architecture is a South African Aura merchant using a Peach Payments-hosted card payment page, subject to final merchant onboarding and confirmation. Aura's backend must calculate order totals, create pending records and validate Peach Payments server notifications before treating an order as paid. Card numbers and CVVs must never be collected by the Aura storefront.
 
-There is no live PayFast integration or payment credential in this repository.
+There is no live Peach Payments integration or payment credential in this repository.
 
 ## Compliance and governance
 
