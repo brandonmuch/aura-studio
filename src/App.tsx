@@ -187,6 +187,8 @@ function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const location = useLocation();
+  const { items } = useCart();
+  const bagCount = items.reduce((total, item) => total + item.quantity, 0);
 
   useEffect(() => { setMenuOpen(false); setSearchOpen(false); }, [location.pathname]);
 
@@ -217,7 +219,7 @@ function Header() {
           <NavLink to="/contact">Contact</NavLink>
           <div className="nav-actions">
             <button className="icon-button" aria-label="Search" onClick={() => setSearchOpen(true)}>⌕</button>
-            <NavLink className="bag-link" to="/cart" aria-label="Shopping bag">Bag <span>{useCart().items.reduce((total, item) => total + item.quantity, 0)}</span></NavLink>
+            <NavLink className="bag-link" to="/cart" aria-label="Shopping bag">Bag <span>{bagCount}</span></NavLink>
           </div>
         </nav>
       </header>
