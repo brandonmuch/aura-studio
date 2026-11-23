@@ -540,18 +540,12 @@ function TransfersPage() {
   );
 }
 function ClothingPage() {
-  const [filter, setFilter] = useState("All");
-  const [quickAddSlug, setQuickAddSlug] = useState<string | null>(null);
   const [addedSlug, setAddedSlug] = useState<string | null>(null);
   const { addItem, items } = useCart();
   const categories = ["All", "Clothing"];
+  const [filter, setFilter] = useState("All");
   const visible = products.filter((product) => filter === "All" || product.category === filter);
   const bagCount = items.reduce((total, item) => total + item.quantity, 0);
-
-  const openQuickAdd = (slug: string) => {
-    setQuickAddSlug((current) => current === slug ? null : slug);
-    setAddedSlug(null);
-  };
 
   return (
     <main>
@@ -566,10 +560,8 @@ function ClothingPage() {
             </div>
           </div>
         </div>
-
         <div className="product-grid">
           {visible.map((product, index) => {
-            const isOpen = quickAddSlug === product.slug;
             const wasAdded = addedSlug === product.slug;
             return (
               <article className="product-card" key={product.slug}>
@@ -582,38 +574,24 @@ function ClothingPage() {
                     <h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3>
                     <p>View product details</p>
                   </div>
-                  <button
-                    className={isOpen ? "quick-add-toggle is-open" : "quick-add-toggle"}
-                    type="button"
-                    aria-label={isOpen ? `Close quick add for ${product.name}` : `Show purchase options for ${product.name}`}
-                    aria-expanded={isOpen}
-                    aria-controls={`quick-add-${product.slug}`}
-                    onClick={() => openQuickAdd(product.slug)}
-                  >
-                    <span aria-hidden="true">+</span>
-                  </button>
                 </div>
-                {isOpen && (
-                  <div className="quick-add-panel" id={`quick-add-${product.slug}`}>
-                    {wasAdded ? (
-                      <div className="quick-add-confirmation" role="status">
-                        <span>Added to bag</span>
-                        <Link to="/cart">View bag ({bagCount}) <span aria-hidden="true">↗</span></Link>
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          className="button button-dark button-small"
-                          type="button"
-                          onClick={() => { addItem(product.slug); setAddedSlug(product.slug); }}
-                        >
-                          Add to bag
-                        </button>
-                        <Link className="quick-add-details" to={`/product/${product.slug}`}>View details</Link>
-                      </>
-                    )}
-                  </div>
-                )}
+                <div className="product-card-actions">
+                  {wasAdded ? (
+                    <div className="quick-add-confirmation" role="status">
+                      <span>Added to bag</span>
+                      <Link to="/cart">View bag ({bagCount}) <span aria-hidden="true">↗</span></Link>
+                    </div>
+                  ) : (
+                    <button
+                      className="button button-dark product-card-add"
+                      type="button"
+                      onClick={() => { addItem(product.slug); setAddedSlug(product.slug); }}
+                    >
+                      Add to bag <span aria-hidden="true">+</span>
+                    </button>
+                  )}
+                  <Link className="product-card-details" to={`/product/${product.slug}`}>View details <span aria-hidden="true">↗</span></Link>
+                </div>
               </article>
             );
           })}
@@ -633,9 +611,35 @@ function ProductPage() {
 }
 
 function SpaPage() {
-  return <main><PageHero eyebrow="Aura Spa" title={<>Make room<br /><em>to reset.</em></>} intro="A restorative pause. Thoughtful treatments and wellbeing experiences designed around how you want to feel." image={ASSETS.sustainability} imageAlt="Calm natural texture from the temporary template image set" /><section className="feature-text section-pad"><div><span className="eyebrow">A moment for yourself</span><h2>Return to a place<br /><em>of balance.</em></h2></div><div><p>Aura Spa is a space for slowing down, restoring and being cared for with intention.</p><p>Treatment names, availability, location, practitioner details and prices will be published once the service menu is confirmed.</p></div></section><section className="spa-menu-grid"><div className="spa-menu-image"><img src={ASSETS.lifestyle} alt="Lifestyle image from the temporary design template" loading="lazy" /></div><div className="spa-menu-copy"><span className="eyebrow">The spa experience</span><h2>Care that meets<br /><em>you where you are.</em></h2><p>Every appointment should be clear before it is confirmed: what the experience includes, how long it takes, what it costs and how to prepare.</p><Link className="text-link" to="/policies/bookings">Booking and cancellation policy <span>↗</span></Link></div></section><EnquiryPanel kind="spa" title="Find your time to reset" intro="Tell us what you are looking for. This preview form is not connected to a live inbox yet." /></main>;
+  return (
+    <main>
+      <PageHero
+        eyebrow="Aura Spa"
+        title={<>A restorative<br /><em>destination.</em></>}
+        intro="A considered collection of spa and wellbeing experiences for international guests. Discover thoughtful care, take time to reset and make space for yourself while you travel."
+        image={ASSETS.sustainability}
+        imageAlt="Calm natural texture from the temporary template image set"
+      />
+      <section className="feature-text section-pad">
+        <div><span className="eyebrow">An experience beyond the everyday</span><h2>Time well<br /><em>taken.</em></h2></div>
+        <div>
+          <p>Aura Spa is being shaped for guests travelling from near and far, with a distinct treatment collection and a more considered approach to personal wellbeing.</p>
+          <p>The treatment menu will present each experience with a clear description, duration, price and practical details, so international guests can plan with confidence before they arrive.</p>
+        </div>
+      </section>
+      <section className="spa-menu-grid">
+        <div className="spa-menu-image"><img src={ASSETS.lifestyle} alt="Editorial spa and travel image from the temporary design reference set" loading="lazy" /></div>
+        <div className="spa-menu-copy">
+          <span className="eyebrow">The Aura Spa collection</span>
+          <h2>Thoughtful care.<br /><em>Distinct experiences.</em></h2>
+          <p>Our spa collection will be presented as a curated menu rather than a generic list of local salon services. Each treatment will have its own character, with transparent details for guests arranging their visit in advance.</p>
+          <Link className="text-link" to="/policies/bookings">Booking and cancellation policy <span>↗</span></Link>
+        </div>
+      </section>
+      <EnquiryPanel kind="spa" title="Plan your spa experience" intro="Tell us a little about your visit. We will make it easy to enquire about the right experience and preferred timing." />
+    </main>
+  );
 }
-
 type EnquiryValues = {
   name: string;
   email: string;
