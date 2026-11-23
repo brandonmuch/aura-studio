@@ -529,10 +529,184 @@ function SpaPage() {
   return <main><PageHero eyebrow="Aura Spa" title={<>Make room<br /><em>to reset.</em></>} intro="A restorative pause. Thoughtful treatments and wellbeing experiences designed around how you want to feel." image={ASSETS.sustainability} imageAlt="Calm natural texture from the temporary template image set" /><section className="feature-text section-pad"><div><span className="eyebrow">A moment for yourself</span><h2>Return to a place<br /><em>of balance.</em></h2></div><div><p>Aura Spa is a space for slowing down, restoring and being cared for with intention.</p><p>Treatment names, availability, location, practitioner details and prices will be published once the service menu is confirmed.</p></div></section><section className="spa-menu-grid"><div className="spa-menu-image"><img src={ASSETS.lifestyle} alt="Lifestyle image from the temporary design template" loading="lazy" /></div><div className="spa-menu-copy"><span className="eyebrow">The spa experience</span><h2>Care that meets<br /><em>you where you are.</em></h2><p>Every appointment should be clear before it is confirmed: what the experience includes, how long it takes, what it costs and how to prepare.</p><Link className="text-link" to="/policies/bookings">Booking and cancellation policy <span>↗</span></Link></div></section><EnquiryPanel kind="spa" title="Find your time to reset" intro="Tell us what you are looking for. This preview form is not connected to a live inbox yet." /></main>;
 }
 
+type EnquiryValues = {
+  name: string;
+  email: string;
+  phone: string;
+  date: string;
+  time: string;
+  pickup: string;
+  destination: string;
+  interest: string;
+  message: string;
+  privacyAcknowledged: boolean;
+};
+
 function EnquiryPanel({ kind, title, intro }: { kind: "transfer" | "spa"; title: string; intro: string }) {
+  const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (event: FormEvent) => { event.preventDefault(); setSubmitted(true); };
-  return <section className="enquiry-section section-pad"><div className="enquiry-copy"><span className="eyebrow">{kind === "transfer" ? "Transfer enquiry" : "Spa enquiry"}</span><h2>{title}</h2><p>{intro}</p><p className="form-disclaimer">No information is transmitted or stored by this preview form.</p></div><form className="enquiry-form" onSubmit={handleSubmit}><div className="form-row"><label>Your name<input required name="name" autoComplete="name" /></label><label>Email address<input required name="email" type="email" autoComplete="email" /></label></div><div className="form-row"><label>Phone number<input name="phone" type="tel" autoComplete="tel" /></label><label>{kind === "transfer" ? "Preferred date" : "Preferred appointment date"}<input name="date" type="date" /></label></div>{kind === "transfer" && <div className="form-row"><label>Pick-up location<input name="pickup" /></label><label>Destination<input name="destination" /></label></div>}{kind === "spa" && <label>What kind of experience are you interested in?<select name="interest" defaultValue=""><option value="" disabled>Select an option</option><option>Restorative treatment</option><option>Wellbeing experience</option><option>Not sure yet</option></select></label>}<label>Anything else we should know?<textarea rows={4} name="message" /></label><button className="button button-dark" type="submit">Preview enquiry <span>↗</span></button>{submitted && <p className="form-status" role="status">This is a design preview. The enquiry has not been sent. A secure submission route will be connected before launch.</p>}</form></section>;
+  const [values, setValues] = useState<EnquiryValues>({
+    name: "",
+    email: "",
+    phone: "",
+    date: "",
+    time: "",
+    pickup: "",
+    destination: "",
+    interest: "",
+    message: "",
+    privacyAcknowledged: false,
+  });
+
+  const steps = kind === "transfer"
+    ? ["Your name", "Contact details", "Your route", "Travel date", "A few details", "Before you finish"]
+    : ["Your name", "Contact details", "Your experience", "Appointment date", "A few details", "Before you finish"];
+
+  const update = <Key extends keyof EnquiryValues>(key: Key, value: EnquiryValues[Key]) => {
+    setValues((current) => ({ ...current, [key]: value }));
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (step < steps.length - 1) {
+      setStep((current) => current + 1);
+      return;
+    }
+    setSubmitted(true);
+  };
+
+  const handleBack = () => setStep((current) => Math.max(0, current - 1));
+
+  return (
+    <section className="enquiry-section section-pad" aria-labelledby="enquiry-title">
+      <div className="enquiry-copy">
+        <span className="eyebrow">{kind === "transfer" ? "Transfer enquiry" : "Spa enquiry"}</span>
+        <h2 id="enquiry-title">{title}</h2>
+        <p>{intro}</p>
+        <p className="form-disclaimer">A few simple steps. You can go back and change your answers before finishing.</p>
+      </div>
+
+      <div className="enquiry-flow">
+        {!submitted ? (
+          <>
+            <div className="enquiry-flow-top">
+              <span>Step {step + 1} of {steps.length}</span>
+              <span>{Math.round(((step + 1) / steps.length) * 100)}% complete</span>
+            </div>
+            <div
+              className="enquiry-progress"
+              role="progressbar"
+              aria-label="Enquiry progress"
+              aria-valuemin={0}
+              aria-valuemax={steps.length}
+              aria-valuenow={step + 1}
+            >
+              <span style={{ width: `${((step + 1) / steps.length) * 100}%` }} />
+            </div>
+
+            <form className="enquiry-form enquiry-step-form" onSubmit={handleSubmit}>
+              <div className="enquiry-step-content" key={step} aria-live="polite">
+                <span className="eyebrow">{kind === "transfer" ? "Plan your journey" : "Plan your experience"}</span>
+                <h3>{steps[step]}</h3>
+
+                {step === 0 && (
+                  <label htmlFor="enquiry-name">What should we call you?
+                    <input id="enquiry-name" name="name" autoComplete="name" autoFocus required value={values.name} onChange={(event) => update("name", event.target.value)} placeholder="Your name" />
+                  </label>
+                )}
+
+                {step === 1 && (
+                  <>
+                    <label htmlFor="enquiry-email">What's the best email address to reach you?
+                      <input id="enquiry-email" name="email" type="email" autoComplete="email" autoFocus required value={values.email} onChange={(event) => update("email", event.target.value)} placeholder="you@example.com" />
+                    </label>
+                    <label htmlFor="enquiry-phone">Phone number <span className="field-optional">Optional</span>
+                      <input id="enquiry-phone" name="phone" type="tel" autoComplete="tel" value={values.phone} onChange={(event) => update("phone", event.target.value)} placeholder="Your contact number" />
+                    </label>
+                  </>
+                )}
+
+                {step === 2 && kind === "transfer" && (
+                  <div className="enquiry-step-fields">
+                    <label htmlFor="enquiry-pickup">Where should we collect you?
+                      <input id="enquiry-pickup" name="pickup" autoFocus required value={values.pickup} onChange={(event) => update("pickup", event.target.value)} placeholder="Pick-up location" />
+                    </label>
+                    <label htmlFor="enquiry-destination">Where are you heading?
+                      <input id="enquiry-destination" name="destination" required value={values.destination} onChange={(event) => update("destination", event.target.value)} placeholder="Destination" />
+                    </label>
+                  </div>
+                )}
+
+                {step === 2 && kind === "spa" && (
+                  <label htmlFor="enquiry-interest">What kind of experience are you interested in?
+                    <select id="enquiry-interest" name="interest" autoFocus required value={values.interest} onChange={(event) => update("interest", event.target.value)}>
+                      <option value="" disabled>Select an option</option>
+                      <option>Restorative treatment</option>
+                      <option>Wellbeing experience</option>
+                      <option>Not sure yet</option>
+                    </select>
+                  </label>
+                )}
+
+                {step === 3 && (
+                  <>
+                    <label htmlFor="enquiry-date">{kind === "transfer" ? "What date would you like to travel?" : "When would you like your appointment?"}
+                      <input id="enquiry-date" name="date" type="date" autoFocus required={kind === "transfer"} value={values.date} onChange={(event) => update("date", event.target.value)} />
+                    </label>
+                    {kind === "transfer" && (
+                      <label htmlFor="enquiry-time">Preferred pick-up time <span className="field-optional">Optional</span>
+                        <input id="enquiry-time" name="time" type="time" value={values.time} onChange={(event) => update("time", event.target.value)} />
+                      </label>
+                    )}
+                    {kind === "spa" && <p className="enquiry-hint">A date is helpful, but you can leave this blank if you are still deciding.</p>}
+                  </>
+                )}
+
+                {step === 4 && (
+                  <label htmlFor="enquiry-message">Anything else we should know? <span className="field-optional">Optional</span>
+                    <textarea id="enquiry-message" rows={4} name="message" autoFocus value={values.message} onChange={(event) => update("message", event.target.value)} placeholder={kind === "transfer" ? "Flight details, number of passengers or anything that would help us plan..." : "Share anything that would help us prepare for your visit..."} />
+                  </label>
+                )}
+
+                {step === 5 && (
+                  <div className="enquiry-consent">
+                    <p className="enquiry-consent-intro">Just one final check before you finish.</p>
+                    <div className="consent-check">
+                      <input
+                        id="enquiry-privacy"
+                        name="privacyAcknowledged"
+                        type="checkbox"
+                        required
+                        checked={values.privacyAcknowledged}
+                        onChange={(event) => update("privacyAcknowledged", event.target.checked)}
+                      />
+                      <label htmlFor="enquiry-privacy">I have read the Privacy Policy and understand how my details will be used to respond to this enquiry.</label>
+                    </div>
+                    <p className="enquiry-terms-note">
+                      Sending an enquiry does not confirm a booking or lock in a price. Any confirmed booking will be subject to Aura's <Link to="/policies/terms">Terms and Conditions</Link> and the agreed fare, which will be shared with you before confirmation.
+                    </p>
+                    <p className="enquiry-hint">We ask you to acknowledge the Privacy Policy here. The booking terms are provided for your review before you accept a confirmed booking.</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="enquiry-step-actions">
+                <button className="enquiry-back" type="button" onClick={handleBack} disabled={step === 0}>Back</button>
+                <button className="button button-dark" type="submit">{step === steps.length - 1 ? "Complete enquiry preview" : "Continue"} <span>↗</span></button>
+              </div>
+            </form>
+          </>
+        ) : (
+          <div className="enquiry-complete" role="status">
+            <span className="eyebrow">Thank you</span>
+            <h3>Your details are ready.</h3>
+            <p>This is a design preview and is not connected to a live inbox. Your information has not been sent or stored.</p>
+            <button className="enquiry-back" type="button" onClick={() => { setSubmitted(false); setStep(0); }}>Start again</button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
 }
 
 function AboutPage() {
