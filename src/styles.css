@@ -557,6 +557,26 @@ h1 em, h2 em, h3 em, h4 em, .hero-title em,
   gap: 12px;
   padding: 14px 1px 0;
 }
+.shop-feature-actions {
+  margin-top: 14px;
+}
+.shop-feature-add {
+  width: 100%;
+  min-height: 42px;
+  justify-content: center;
+}
+.shop-feature-actions .quick-add-confirmation {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 10px;
+}
+.shop-feature-actions .quick-add-confirmation a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .shop-feature-card-meta h3 {
   margin: 0 0 5px;
   font-family: var(--serif);
