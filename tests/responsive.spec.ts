@@ -63,7 +63,7 @@ test("mobile navigation remains reachable and easy to tap", async ({ page }) => 
 test("section reveals are present and remain visible with reduced motion", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  await expect(page.locator("#main-content > section.section-reveal")).toHaveCount(3);
+  await expect(page.locator("#main-content > section.section-reveal")).toHaveCount(4);
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/clothing");
