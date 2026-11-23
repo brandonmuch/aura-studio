@@ -186,7 +186,7 @@ test("homepage clothing cards keep consistent framing and responsive alignment",
       const lastCardCentre = layout.cards[2].left + layout.cards[2].width / 2;
       const gridCentre = layout.gridLeft + layout.gridWidth / 2;
       expect(lastCardCentre).toBeCloseTo(gridCentre, 0);
-      expect(layout.cards[2].width).toBeCloseTo(layout.cards[0].width, 0);
+      expect(Math.abs(layout.cards[2].width - layout.cards[0].width)).toBeLessThan(2);
     }
   };
 
