@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => {
+  await page.goto("/");
+  await page.evaluate(() => {
     localStorage.setItem("aura-cookie-choice", JSON.stringify({
       necessary: true,
       analytics: false,
@@ -9,6 +10,7 @@ test.beforeEach(async ({ page }) => {
     }));
     localStorage.removeItem("aura-cart");
   });
+  await page.reload();
 });
 
 test("homepage exposes a clear clothing discovery section", async ({ page }) => {
