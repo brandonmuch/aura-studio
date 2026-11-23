@@ -656,11 +656,29 @@ function ClothingPage() {
   const bagCount = items.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <main id="main-content" tabIndex={-1}>
-      <PageHero title={<>Wear your ease.<br />Move with intention.</>} intro="Explore considered pieces designed for everyday wear." image={ASSETS.hero} imageAlt="Abstract fashion textile composition" />
+    <main id="main-content" tabIndex={-1} className="clothing-page">
+      <PageHero title={<>Wear your ease.<br />Move with intention.</>} intro="A considered wardrobe of expressive essentials, thoughtful details and pieces made to move with you." image={ASSETS.hero} imageAlt="Abstract fashion textile composition" />
+      <section className="clothing-editorial-intro">
+        <p className="clothing-editorial-kicker">The Aura clothing edit</p>
+        <h2>Less, but with <em>feeling.</em></h2>
+        <p>Discover a softer approach to getting dressed. Easy silhouettes, considered textures and a point of view that feels entirely your own.</p>
+      </section>
+      <section className="clothing-lookbook" aria-label="Clothing editorial">
+        <figure className="clothing-lookbook-image clothing-lookbook-image--portrait">
+          <img src={ASSETS.clothingPortrait} alt="Fashion portrait from the Aura clothing editorial" loading="lazy" decoding="async" />
+        </figure>
+        <div className="clothing-lookbook-copy">
+          <p className="clothing-editorial-kicker">01 / The feeling</p>
+          <h2>Made for the moments in between.</h2>
+          <p>Relaxed shapes, quiet confidence and details that reward a closer look. A wardrobe that feels considered without feeling complicated.</p>
+        </div>
+        <figure className="clothing-lookbook-image clothing-lookbook-image--landscape">
+          <img src={ASSETS.clothingCampaignAlt} alt="Aura clothing campaign editorial" loading="lazy" decoding="async" />
+        </figure>
+      </section>
       <section className="catalogue-section section-pad">
         <div className="catalogue-heading">
-          <div><h2>Clothing</h2></div>
+          <div><p className="clothing-editorial-kicker">Explore the collection</p><h2>Clothing</h2></div>
           <div className="catalogue-tools">
             <span>New pieces will be added as the collection is released.</span>
             <div className="filter-tabs" role="group" aria-label="Filter collection">
