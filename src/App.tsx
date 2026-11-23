@@ -118,10 +118,9 @@ const products: Product[] = [
   },
 ];
 
-const policyContent: Record<string, { title: string; eyebrow: string; intro: string; sections: { heading: string; body: string }[] }> = {
+const policyContent: Record<string, { title: string; intro: string; sections: { heading: string; body: string }[] }> = {
   privacy: {
     title: "Privacy policy",
-    eyebrow: "Your information",
     intro: "This draft explains the privacy principles Aura Studio intends to follow. It must be completed with the operating entity, actual systems, retention periods and contact details before the site accepts personal information.",
     sections: [
       { heading: "Who is responsible", body: "The responsible business is [insert registered legal name], trading as Aura Studio, registered in [country] under number [registration number]. Its registered or principal business address is [insert address]. Privacy enquiries should be directed to [insert privacy contact]." },
@@ -135,7 +134,6 @@ const policyContent: Record<string, { title: string; eyebrow: string; intro: str
   },
   terms: {
     title: "Terms and conditions",
-    eyebrow: "Using Aura Studio",
     intro: "These terms are a launch draft. They must be checked against the final business structure, catalogue, booking model and jurisdictions before being made binding.",
     sections: [
       { heading: "The business", body: "The supplier is [insert registered legal name], trading as Aura Studio, with registration number [number], physical address [address], telephone [telephone] and email [email]. Complete these details before taking orders." },
@@ -147,7 +145,6 @@ const policyContent: Record<string, { title: string; eyebrow: string; intro: str
   },
   returns: {
     title: "Returns and refunds",
-    eyebrow: "Clothing orders",
     intro: "Aura's final returns rules depend on the product range, fulfilment location and law applicable to the transaction. This page is deliberately written as a framework rather than inventing a universal return period.",
     sections: [
       { heading: "Before launch", body: "Publish the final return address, request method, time limits, condition requirements, return-shipping responsibility, refund method and expected processing time. Make sure those rules preserve all non-waivable statutory rights." },
@@ -158,7 +155,6 @@ const policyContent: Record<string, { title: string; eyebrow: string; intro: str
   },
   shipping: {
     title: "Shipping and delivery",
-    eyebrow: "Getting your order",
     intro: "Delivery destinations, courier partners, costs and dispatch timelines have not yet been confirmed. This page identifies what Aura must disclose at checkout.",
     sections: [
       { heading: "Delivery destinations", body: "List each country or region where orders can be delivered, and block checkout for unsupported destinations rather than accepting an order that cannot be fulfilled." },
@@ -169,7 +165,6 @@ const policyContent: Record<string, { title: string; eyebrow: string; intro: str
   },
   bookings: {
     title: "Booking and cancellation policy",
-    eyebrow: "Transfers and spa",
     intro: "Transfers and spa services are appointment-based. The final cancellation, rescheduling, deposit and no-show rules must be set for each service and checked against mandatory local consumer protections.",
     sections: [
       { heading: "Booking requests", body: "A request is not a confirmed booking until Aura sends a confirmation with the service, date, time, location, price and any special conditions." },
@@ -180,7 +175,6 @@ const policyContent: Record<string, { title: string; eyebrow: string; intro: str
   },
   cookies: {
     title: "Cookie and preference policy",
-    eyebrow: "Your choices",
     intro: "Aura should use strictly necessary storage for core site functions and keep optional analytics or marketing technologies off until the visitor has made an informed choice where consent is required.",
     sections: [
       { heading: "Necessary storage", body: "Necessary storage supports functions requested by the visitor, such as keeping a shopping bag, remembering a privacy preference or maintaining security. These tools should not be repurposed for advertising." },
@@ -191,7 +185,6 @@ const policyContent: Record<string, { title: string; eyebrow: string; intro: str
   },
   accessibility: {
     title: "Accessibility statement",
-    eyebrow: "Access for everyone",
     intro: "Aura's development target is WCAG 2.2 Level AA. This is a design and testing target, not a claim of certified or independently audited conformance.",
     sections: [
       { heading: "What we are working towards", body: "The site is being designed for keyboard use, visible focus, meaningful heading structure, labelled form controls, text alternatives for meaningful images, sufficient contrast, reduced-motion preferences and responsive reflow." },
@@ -251,7 +244,7 @@ function Header() {
       {searchOpen && (
         <div className="search-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSearchOpen(false); }}>
           <section className="search-panel" role="dialog" aria-modal="true" aria-label="Search Aura Studio">
-            <div className="search-panel-head"><span className="eyebrow">Search Aura</span><button className="icon-button" onClick={() => setSearchOpen(false)} aria-label="Close search">×</button></div>
+            <div className="search-panel-head"><button className="icon-button" onClick={() => setSearchOpen(false)} aria-label="Close search">×</button></div>
             <input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="What are you looking for?" aria-label="Search query" />
             <div className="search-results">
               {results.map((result) => <Link key={result.to} to={result.to}>{result.label}</Link>)}
@@ -307,7 +300,7 @@ function CookieConsent({ onManage }: { onManage: () => void }) {
   if (!visible) return null;
   return (
     <aside className="cookie-banner" aria-label="Cookie preferences">
-      <div><span className="eyebrow">Your privacy matters</span><p>We use necessary storage to make the site work. Optional analytics and marketing should stay off unless you choose to enable them.</p><Link to="/policies/cookies">Read the cookie policy</Link></div>
+      <div><p>We use necessary storage to make the site work. Optional analytics and marketing should stay off unless you choose to enable them.</p><Link to="/policies/cookies">Read the cookie policy</Link></div>
       <div className="cookie-actions">
         <button className="button button-outline button-small" onClick={onManage}>Manage</button>
         <button className="button button-outline button-small" onClick={() => save({ necessary: true, analytics: false, marketing: false })}>Necessary only</button>
@@ -343,7 +336,7 @@ function CookiePreferences({ open, onClose }: { open: boolean; onClose: () => vo
     <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
       <section className="preference-modal" role="dialog" aria-modal="true" aria-labelledby="preference-title">
         <button className="modal-close" onClick={onClose} aria-label="Close preferences">×</button>
-        <span className="eyebrow">Privacy controls</span>
+        
         <h2 id="preference-title">Your preferences.</h2>
         <p>Necessary storage is always active because it supports core site functions. Optional categories remain off unless you choose otherwise.</p>
         <PreferenceRow title="Necessary" description="Security, site functionality and saving this preference." checked disabled />
@@ -409,7 +402,7 @@ function HomePage() {
         <img className="home-hero-image" src={ASSETS.hero} alt="Editorial collection image from the website design template" />
         <div className="home-hero-shade" />
         <div className="home-hero-content">
-          <span className="eyebrow">Aura Studio</span>
+          
           <BlurText text="Luxury, without announcement." className="hero-title" delay={75} />
           <p>Considered clothing. Cape Town airport transfers. Restorative spa experiences.</p>
           <Link className="button button-cream" to="/clothing">Shop the collection</Link>
@@ -421,7 +414,7 @@ function HomePage() {
         <img src={ASSETS.dress} alt="Editorial clothing image from the temporary collection preview" loading="lazy" />
         <div className="home-campaign-shade" />
         <div className="home-campaign-copy home-campaign-copy--left">
-          <span className="eyebrow">Aura Clothing · The collection</span>
+          
           <h2 id="home-clothing-title">A wardrobe,<br />considered.</h2>
           <p>Pieces chosen with intention. An easier relationship with getting dressed.</p>
           <Link className="button button-cream" to="/clothing">Discover the collection</Link>
@@ -432,7 +425,7 @@ function HomePage() {
       <section className="shop-feature section-pad" aria-labelledby="shop-feature-title">
         <div className="shop-feature-head">
           <div>
-            <span className="eyebrow">Aura Clothing</span>
+            
             <h2 id="shop-feature-title">The clothing edit.</h2>
             <p>A first look at the pieces and silhouettes shaping the Aura wardrobe.</p>
           </div>
@@ -473,7 +466,7 @@ function HomePage() {
         <img src={ASSETS.lifestyle} alt="Editorial travel image from the temporary design image set" loading="lazy" />
         <div className="home-campaign-shade home-campaign-shade--deep" />
         <div className="home-campaign-copy home-campaign-copy--centre">
-          <span className="eyebrow">Aura experiences</span>
+          
           <h2 id="home-experiences-title">Arrive well.<br />Make room to reset.</h2>
           <p>Thoughtful airport transfers in Cape Town, alongside restorative spa experiences.</p>
           <div className="home-campaign-actions">
@@ -487,7 +480,7 @@ function HomePage() {
 
       <section className="story-split">
         <div className="story-image"><img src={ASSETS.mobileHero} alt="Editorial image from the website design template" loading="lazy" /></div>
-        <div className="story-copy"><span className="eyebrow">The Aura standard</span><h2>An elevated experience,<br /><em>in every detail.</em></h2><p>True luxury is not about excess. It is the feeling of being looked after, with care that is considered, consistent and quietly confident.</p><Link className="text-link" to="/about">Our story</Link></div>
+        <div className="story-copy"><h2>An elevated experience,<br /><em>in every detail.</em></h2><p>True luxury is not about excess. It is the feeling of being looked after, with care that is considered, consistent and quietly confident.</p><Link className="text-link" to="/about">Our story</Link></div>
         <div className="standards-grid">
           <StandardItem icon="privacy_tip" title="Privacy first" body="Clear choices and respectful handling of personal information." />
           <StandardItem icon="credit_card" title="Secure payments" body="A hosted payment journey through a dedicated payment provider." />
@@ -497,7 +490,7 @@ function HomePage() {
       </section>
 
       <section className="journal-teaser section-pad">
-        <div className="section-head"><div><span className="eyebrow">The Journal</span><h2>Notes on living<br /><em>well.</em></h2></div><Link className="text-link" to="/journal">Read the journal</Link></div>
+        <div className="section-head"><div><h2>Notes on living<br /><em>well.</em></h2></div><Link className="text-link" to="/journal">Read the journal</Link></div>
         <div className="journal-grid">
           <JournalCard category="Travel" title="The art of arriving well" image={ASSETS.lifestyle} to="/journal" />
           <JournalCard category="Style" title="A wardrobe with intention" image={ASSETS.dress} to="/journal" />
@@ -514,25 +507,24 @@ function StandardItem({ icon, title, body }: { icon: string; title: string; body
 }
 
 function JournalCard({ category, title, image, to }: { category: string; title: string; image: string; to: string }) {
-  return <Link className="journal-card" to={to}><div className="journal-card-image"><img src={image} alt="" loading="lazy" /></div><span className="eyebrow">{category}</span><h3>{title}</h3><span className="text-link">Coming to the journal</span></Link>;
+  return <Link className="journal-card" to={to}><div className="journal-card-image"><img src={image} alt="" loading="lazy" /></div><h3>{title}</h3><span className="text-link">Coming to the journal</span></Link>;
 }
 
 function Newsletter() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("");
   const submit = (event: FormEvent) => { event.preventDefault(); setStatus("Newsletter sign-up will be connected before launch. Your address has not been sent or stored."); };
-  return <section className="newsletter-section"><div><span className="eyebrow">A note from Aura</span><h2>Be the first to<br /><em>hear what's coming.</em></h2></div><form onSubmit={submit}><label htmlFor="newsletter-email">Your email address</label><div className="newsletter-control"><input id="newsletter-email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email address" /><button aria-label="Join newsletter" type="submit">↗</button></div><p>Optional updates only. You can unsubscribe at any time. <Link to="/policies/privacy">Privacy policy</Link></p>{status && <p role="status" className="form-status">{status}</p>}</form></section>;
+  return <section className="newsletter-section"><div><h2>Be the first to<br /><em>hear what's coming.</em></h2></div><form onSubmit={submit}><label htmlFor="newsletter-email">Your email address</label><div className="newsletter-control"><input id="newsletter-email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email address" /><button aria-label="Join newsletter" type="submit">↗</button></div><p>Optional updates only. You can unsubscribe at any time. <Link to="/policies/privacy">Privacy policy</Link></p>{status && <p role="status" className="form-status">{status}</p>}</form></section>;
 }
 
-function PageHero({ eyebrow, title, intro, image, imageAlt = "" }: { eyebrow: string; title: ReactNode; intro: string; image?: string; imageAlt?: string }) {
-  return <section className={image ? "page-hero page-hero--image page-hero--full" : "page-hero page-hero--full"}>{image && <><img src={image} alt={imageAlt} /><div className="page-hero-overlay" /></>}<div className="page-hero-copy"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{intro}</p></div></section>;
+function PageHero({ title, intro, image, imageAlt = "" }: { title: ReactNode; intro: string; image?: string; imageAlt?: string }) {
+  return <section className={image ? "page-hero page-hero--image page-hero--full" : "page-hero page-hero--full"}>{image && <><img src={image} alt={imageAlt} /><div className="page-hero-overlay" /></>}<div className="page-hero-copy"><h1>{title}</h1><p>{intro}</p></div></section>;
 }
 
 function TransfersPage() {
   return (
     <main>
       <PageHero
-        eyebrow="Aura Transfers · Cape Town"
         title={<>Arrive well.<br /><em>In Cape Town.</em></>}
         intro="Private airport transfers in Cape Town, South Africa, arranged with care from arrival to drop-off."
         image={ASSETS.lifestyle}
@@ -540,7 +532,7 @@ function TransfersPage() {
       />
       <section className="feature-text section-pad">
         <div>
-          <span className="eyebrow">A more considered arrival</span>
+          
           <h2>Good travel is felt<br /><em>before you arrive.</em></h2>
         </div>
         <div>
@@ -549,9 +541,9 @@ function TransfersPage() {
         </div>
       </section>
       <section className="service-detail-grid">
-        <div><span className="eyebrow">01 / Arrivals</span><h3>A calmer arrival.</h3><p>Share your flight details and arrival time so your requested airport pick-up can be planned.</p></div>
-        <div><span className="eyebrow">02 / Departures</span><h3>Leave with ease.</h3><p>Arrange a Cape Town airport drop-off with the pick-up details and timing agreed in advance.</p></div>
-        <div><span className="eyebrow">03 / Clear confirmation</span><h3>No surprises.</h3><p>Receive written confirmation of the route, agreed fare and any conditions before payment.</p></div>
+        <div><h3>A calmer arrival.</h3><p>Share your flight details and arrival time so your requested airport pick-up can be planned.</p></div>
+        <div><h3>Leave with ease.</h3><p>Arrange a Cape Town airport drop-off with the pick-up details and timing agreed in advance.</p></div>
+        <div><h3>No surprises.</h3><p>Receive written confirmation of the route, agreed fare and any conditions before payment.</p></div>
       </section>
       <EnquiryPanel kind="transfer" title="Plan your Cape Town transfer" intro="Tell us a little about your flight and journey. We will take it one step at a time." />
     </main>
@@ -567,10 +559,10 @@ function ClothingPage() {
 
   return (
     <main>
-      <PageHero eyebrow="Aura Clothing" title={<>Wear your ease.<br />Move with intention.</>} intro="Explore considered pieces designed for everyday wear." image={ASSETS.hero} imageAlt="Editorial clothing image from the temporary template set" />
+      <PageHero title={<>Wear your ease.<br />Move with intention.</>} intro="Explore considered pieces designed for everyday wear." image={ASSETS.hero} imageAlt="Editorial clothing image from the temporary template set" />
       <section className="catalogue-section section-pad">
         <div className="catalogue-heading">
-          <div><span className="eyebrow">Shop the collection</span><h2>Clothing</h2></div>
+          <div><h2>Clothing</h2></div>
           <div className="catalogue-tools">
             <span>New pieces will be added as the collection is released.</span>
             <div className="filter-tabs" role="group" aria-label="Filter collection">
@@ -625,21 +617,20 @@ function ProductPage() {
   const navigate = useNavigate();
   const { addItem } = useCart();
   if (!product) return <NotFoundPage />;
-  return <main><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span><Link to="/clothing">Clothing</Link><span>/</span><span>{product.name}</span></div><section className="product-detail"><div className="product-detail-image"><img src={product.image} alt={product.note} /></div><div className="product-detail-copy"><span className="eyebrow">Aura Clothing</span><h1>{product.name}</h1><p className="product-description">{product.description}</p><div className="product-detail-rule" /><p className="product-price-pending">Price and product options will be displayed here.</p><p className="catalogue-note">This is a storefront preview. Final product details, size options, stock and prices are being prepared. Orders will open once the catalogue and secure checkout are connected.</p><button className="button button-dark" onClick={() => { addItem(product.slug); navigate("/cart"); }}>Add to bag</button></div></section></main>;
+  return <main><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span><Link to="/clothing">Clothing</Link><span>/</span><span>{product.name}</span></div><section className="product-detail"><div className="product-detail-image"><img src={product.image} alt={product.note} /></div><div className="product-detail-copy"><h1>{product.name}</h1><p className="product-description">{product.description}</p><div className="product-detail-rule" /><p className="product-price-pending">Price and product options will be displayed here.</p><p className="catalogue-note">This is a storefront preview. Final product details, size options, stock and prices are being prepared. Orders will open once the catalogue and secure checkout are connected.</p><button className="button button-dark" onClick={() => { addItem(product.slug); navigate("/cart"); }}>Add to bag</button></div></section></main>;
 }
 
 function SpaPage() {
   return (
     <main>
       <PageHero
-        eyebrow="Aura Spa"
         title={<>A restorative<br /><em>destination.</em></>}
         intro="A considered collection of spa and wellbeing experiences for international guests. Discover thoughtful care, take time to reset and make space for yourself while you travel."
         image={ASSETS.sustainability}
         imageAlt="Calm natural texture from the temporary template image set"
       />
       <section className="feature-text section-pad">
-        <div><span className="eyebrow">An experience beyond the everyday</span><h2>Time well<br /><em>taken.</em></h2></div>
+        <div><h2>Time well<br /><em>taken.</em></h2></div>
         <div>
           <p>Aura Spa is being shaped for guests travelling from near and far, with a distinct treatment collection and a more considered approach to personal wellbeing.</p>
           <p>The treatment menu will present each experience with a clear description, duration, price and practical details, so international guests can plan with confidence before they arrive.</p>
@@ -648,7 +639,7 @@ function SpaPage() {
       <section className="spa-menu-grid">
         <div className="spa-menu-image"><img src={ASSETS.lifestyle} alt="Editorial spa and travel image from the temporary design reference set" loading="lazy" /></div>
         <div className="spa-menu-copy">
-          <span className="eyebrow">The Aura Spa collection</span>
+          
           <h2>Thoughtful care.<br /><em>Distinct experiences.</em></h2>
           <p>Our spa collection will be presented as a curated menu rather than a generic list of local salon services. Each treatment will have its own character, with transparent details for guests arranging their visit in advance.</p>
           <Link className="text-link" to="/policies/bookings">Booking and cancellation policy</Link>
@@ -709,7 +700,7 @@ function EnquiryPanel({ kind, title, intro }: { kind: "transfer" | "spa"; title:
   return (
     <section className="enquiry-section section-pad" aria-labelledby="enquiry-title">
       <div className="enquiry-copy">
-        <span className="eyebrow">{kind === "transfer" ? "Transfer enquiry" : "Spa enquiry"}</span>
+        
         <h2 id="enquiry-title">{title}</h2>
         <p>{intro}</p>
         <p className="form-disclaimer">A few simple steps. You can go back and change your answers before finishing.</p>
@@ -735,7 +726,7 @@ function EnquiryPanel({ kind, title, intro }: { kind: "transfer" | "spa"; title:
 
             <form className="enquiry-form enquiry-step-form" onSubmit={handleSubmit}>
               <div className="enquiry-step-content" key={step} aria-live="polite">
-                <span className="eyebrow">{kind === "transfer" ? "Plan your journey" : "Plan your experience"}</span>
+                
                 <h3>{steps[step]}</h3>
 
                 {step === 0 && (
@@ -827,7 +818,7 @@ function EnquiryPanel({ kind, title, intro }: { kind: "transfer" | "spa"; title:
           </>
         ) : (
           <div className="enquiry-complete" role="status">
-            <span className="eyebrow">Thank you</span>
+            
             <h3>Your details are ready.</h3>
             <p>This is a design preview and is not connected to a live inbox. Your information has not been sent or stored.</p>
             <button className="enquiry-back" type="button" onClick={() => { setSubmitted(false); setStep(0); }}>Start again</button>
@@ -839,7 +830,7 @@ function EnquiryPanel({ kind, title, intro }: { kind: "transfer" | "spa"; title:
 }
 
 function AboutPage() {
-  return <main><PageHero eyebrow="Our story" title={<>A more thoughtful<br /><em>kind of luxury.</em></>} intro="Aura Studio brings together travel, personal style and wellbeing under one considered point of view." image={ASSETS.hero} imageAlt="Editorial template image" /><section className="feature-text section-pad"><div><span className="eyebrow">What connects us</span><h2>It is the feeling<br /><em>of being looked after.</em></h2></div><div><p>We believe quality is as much about how something makes you feel as it is about how it looks. That belief shapes every part of Aura Studio.</p><p>Each division has its own purpose, but they share the same standard: clarity, care and thoughtful attention to detail.</p></div></section><section className="values-grid"><StandardItem icon="01" title="Consideration" body="Every choice begins with the person on the other side of it." /><StandardItem icon="02" title="Consistency" body="A premium experience should feel considered at every touchpoint." /><StandardItem icon="03" title="Integrity" body="Clear promises, honest information and accountability." /><StandardItem icon="04" title="Respect" body="Your time, choices, privacy and wellbeing matter." /></section></main>;
+  return <main><PageHero title={<>A more thoughtful<br /><em>kind of luxury.</em></>} intro="Aura Studio brings together travel, personal style and wellbeing under one considered point of view." image={ASSETS.hero} imageAlt="Editorial template image" /><section className="feature-text section-pad"><div><h2>It is the feeling<br /><em>of being looked after.</em></h2></div><div><p>We believe quality is as much about how something makes you feel as it is about how it looks. That belief shapes every part of Aura Studio.</p><p>Each division has its own purpose, but they share the same standard: clarity, care and thoughtful attention to detail.</p></div></section><section className="values-grid"><StandardItem icon="01" title="Consideration" body="Every choice begins with the person on the other side of it." /><StandardItem icon="02" title="Consistency" body="A premium experience should feel considered at every touchpoint." /><StandardItem icon="03" title="Integrity" body="Clear promises, honest information and accountability." /><StandardItem icon="04" title="Respect" body="Your time, choices, privacy and wellbeing matter." /></section></main>;
 }
 
 function JournalPage() {
@@ -848,7 +839,7 @@ function JournalPage() {
     { category: "Style", title: "A wardrobe with intention", body: "An introduction to a more considered approach to everyday dressing.", image: ASSETS.dress },
     { category: "Wellbeing", title: "Making space to reset", body: "Why rest deserves a place in the rhythm of everyday life.", image: ASSETS.sustainability },
   ];
-  return <main><PageHero eyebrow="The journal" title={<>Notes on living<br /><em>well.</em></>} intro="Stories, observations and small reminders to move through life with a little more intention." /><section className="section-pad"><div className="journal-grid journal-grid-large">{entries.map((entry) => <article className="journal-card journal-card-static" key={entry.category}><div className="journal-card-image"><img src={entry.image} alt="" loading="lazy" /></div><span className="eyebrow">{entry.category} · Coming soon</span><h3>{entry.title}</h3><p>{entry.body}</p></article>)}</div><p className="catalogue-note">Journal articles are editorial placeholders and will be written and reviewed before publication.</p></section></main>;
+  return <main><PageHero title={<>Notes on living<br /><em>well.</em></>} intro="Stories, observations and small reminders to move through life with a little more intention." /><section className="section-pad"><div className="journal-grid journal-grid-large">{entries.map((entry) => <article className="journal-card journal-card-static" key={entry.category}><div className="journal-card-image"><img src={entry.image} alt="" loading="lazy" /></div><h3>{entry.title}</h3><p>{entry.body}</p></article>)}</div><p className="catalogue-note">Journal articles are editorial placeholders and will be written and reviewed before publication.</p></section></main>;
 }
 
 type ContactValues = {
@@ -863,10 +854,10 @@ type ContactValues = {
 function ContactPage() {
   return (
     <main>
-      <PageHero eyebrow="Contact" title={<>Let's begin<br /><em>with a conversation.</em></>} intro="Whether you are planning a journey, exploring the collection or looking for a moment to reset, we would be glad to hear from you." />
+      <PageHero title={<>Let's begin<br /><em>with a conversation.</em></>} intro="Whether you are planning a journey, exploring the collection or looking for a moment to reset, we would be glad to hear from you." />
       <section className="contact-layout section-pad">
         <div>
-          <span className="eyebrow">Get in touch</span>
+          
           <h2>Tell us what<br /><em>you have in mind.</em></h2>
           <p>Share a little about what you need. We will take it one step at a time, and you can go back to make changes before finishing.</p>
           <p className="contact-placeholder">Official contact details will be added once Aura's business email, telephone and service locations are confirmed.</p>
@@ -923,7 +914,7 @@ function ContactFlow() {
           </div>
           <form className="enquiry-form enquiry-step-form" onSubmit={handleSubmit}>
             <div className="enquiry-step-content" key={step} aria-live="polite">
-              <span className="eyebrow">Contact Aura</span>
+              
               <h3>{steps[step]}</h3>
 
               {step === 0 && (
@@ -989,7 +980,7 @@ function ContactFlow() {
         </>
       ) : (
         <div className="enquiry-complete" role="status">
-          <span className="eyebrow">Thank you</span>
+          
           <h3>Your message is ready.</h3>
           <p>This is a design preview. Your message has not been sent or stored. A secure contact route will be connected before launch.</p>
           <button className="enquiry-back" type="button" onClick={() => { setSubmitted(false); setStep(0); }}>Start again</button>
@@ -1007,15 +998,15 @@ function FaqPage() {
     ["How are card payments handled?", "The intended setup is a hosted payment page from the selected payment provider. Aura will not ask customers to send card details by email, phone or message."],
     ["How do I change my privacy choices?", "Use Cookie settings in the footer to reopen the preference panel. You can also read the privacy and cookie policies for more information."],
   ];
-  return <main><PageHero eyebrow="Support" title={<>Good to know.<br /><em>Before you begin.</em></>} intro="A few answers to help you understand how Aura Studio works." /><section className="faq-list section-pad">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>＋</span></summary><p>{answer}</p></details>)}</section></main>;
+  return <main><PageHero title={<>Good to know.<br /><em>Before you begin.</em></>} intro="A few answers to help you understand how Aura Studio works." /><section className="faq-list section-pad">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>＋</span></summary><p>{answer}</p></details>)}</section></main>;
 }
 
 function TrustPage() {
-  return <main><PageHero eyebrow="Trust & standards" title={<>Care is a practice.<br /><em>Not a promise.</em></>} intro="Aura is being designed around privacy, secure operations, accessible journeys and clear consumer information. These are build commitments, not claims of certification." /><section className="trust-grid section-pad"><TrustCard title="Privacy by design" copy="Collect only the information needed for the service, explain why it is needed, limit access and define retention." items={["Clear privacy notice","Purpose-limited collection","Optional consent controls","Documented retention and deletion"]} /><TrustCard title="Secure payment hand-off" copy="Use a hosted payment provider for card entry and verify payment confirmations server-side before marking an order as paid." items={["No card data stored by Aura","Hosted checkout","Server-side payment verification","Restricted secrets and access"]} /><TrustCard title="Consumer clarity" copy="Give customers the information needed to decide, review and correct an order before committing." items={["Full prices and charges","Clear delivery and booking details","Returns and cancellations","Support and complaint route"]} /><TrustCard title="Accessible experience" copy="Build towards WCAG 2.2 AA with accessible structure, focus states, keyboard use and reduced-motion support." items={["Semantic page structure","Visible keyboard focus","Form labels and error messages","Responsive, readable layouts"]} /></section><section className="trust-footnote"><p>Standards and laws are not interchangeable. Legal applicability depends on the markets served and the business's actual operations. The final policies, technical controls and supplier contracts must be reviewed before launch.</p><Link to="/policies/privacy" className="text-link">Read the privacy policy</Link></section></main>;
+  return <main><PageHero title={<>Care is a practice.<br /><em>Not a promise.</em></>} intro="Aura is being designed around privacy, secure operations, accessible journeys and clear consumer information. These are build commitments, not claims of certification." /><section className="trust-grid section-pad"><TrustCard title="Privacy by design" copy="Collect only the information needed for the service, explain why it is needed, limit access and define retention." items={["Clear privacy notice","Purpose-limited collection","Optional consent controls","Documented retention and deletion"]} /><TrustCard title="Secure payment hand-off" copy="Use a hosted payment provider for card entry and verify payment confirmations server-side before marking an order as paid." items={["No card data stored by Aura","Hosted checkout","Server-side payment verification","Restricted secrets and access"]} /><TrustCard title="Consumer clarity" copy="Give customers the information needed to decide, review and correct an order before committing." items={["Full prices and charges","Clear delivery and booking details","Returns and cancellations","Support and complaint route"]} /><TrustCard title="Accessible experience" copy="Build towards WCAG 2.2 AA with accessible structure, focus states, keyboard use and reduced-motion support." items={["Semantic page structure","Visible keyboard focus","Form labels and error messages","Responsive, readable layouts"]} /></section><section className="trust-footnote"><p>Standards and laws are not interchangeable. Legal applicability depends on the markets served and the business's actual operations. The final policies, technical controls and supplier contracts must be reviewed before launch.</p><Link to="/policies/privacy" className="text-link">Read the privacy policy</Link></section></main>;
 }
 
 function TrustCard({ title, copy, items }: { title: string; copy: string; items: string[] }) {
-  return <article className="trust-card"><span className="eyebrow">Aura standard</span><h2>{title}</h2><p>{copy}</p><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></article>;
+  return <article className="trust-card"><h2>{title}</h2><p>{copy}</p><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></article>;
 }
 
 function CartPage() {
@@ -1026,12 +1017,12 @@ function CartPage() {
   const itemCount = cartProducts.reduce((total, line) => total + line.quantity, 0);
 
   if (cartProducts.length === 0) {
-    return <main className="empty-state section-pad"><span className="eyebrow">Your bag</span><h1>Your bag is empty.</h1><p>Explore the clothing collection and add pieces to your bag.</p><Link className="button button-dark" to="/clothing">Shop clothing</Link></main>;
+    return <main className="empty-state section-pad"><h1>Your bag is empty.</h1><p>Explore the clothing collection and add pieces to your bag.</p><Link className="button button-dark" to="/clothing">Shop clothing</Link></main>;
   }
 
   return (
     <main className="cart-page section-pad">
-      <div className="cart-heading"><span className="eyebrow">Your bag</span><h1>Shopping bag</h1></div>
+      <div className="cart-heading"><h1>Shopping bag</h1></div>
       <div className="cart-lines">
         {cartProducts.map((line) => (
           <article className="cart-line" key={line.slug}>
@@ -1062,18 +1053,18 @@ function CartPage() {
 }
 
 function CheckoutPage() {
-  return <main className="empty-state section-pad"><span className="eyebrow">Secure checkout</span><h1>Checkout is being prepared.</h1><p>Peach Payments will power the hosted card payment journey. Live checkout will be enabled once product prices, stock, delivery rules and server-side payment verification are configured.</p><Link className="button button-dark" to="/cart">Return to your bag</Link></main>;
+  return <main className="empty-state section-pad"><h1>Checkout is being prepared.</h1><p>Peach Payments will power the hosted card payment journey. Live checkout will be enabled once product prices, stock, delivery rules and server-side payment verification are configured.</p><Link className="button button-dark" to="/cart">Return to your bag</Link></main>;
 }
 
 function PolicyPage() {
   const { policy } = useParams();
   const data = policy ? policyContent[policy] : undefined;
   if (!data) return <NotFoundPage />;
-  return <main><section className="policy-hero"><span className="eyebrow">{data.eyebrow}</span><h1>{data.title}</h1><p>{data.intro}</p><span className="policy-draft-label">Draft for launch review · Last updated 20 November 2026</span></section><article className="policy-content">{data.sections.map((section, index) => <section key={section.heading}><span className="policy-number">0{index + 1}</span><div><h2>{section.heading}</h2><p>{section.body}</p></div></section>)}<aside className="policy-note"><strong>Important</strong><p>This page is a working website draft, not legal advice and not a representation that Aura Studio is compliant in every country. Confirm the operating entity, markets, providers and service rules, then obtain jurisdiction-specific legal review before launch.</p></aside></article></main>;
+  return <main><section className="policy-hero"><h1>{data.title}</h1><p>{data.intro}</p><span className="policy-draft-label">Draft for launch review · Last updated 20 November 2026</span></section><article className="policy-content">{data.sections.map((section, index) => <section key={section.heading}><span className="policy-number">0{index + 1}</span><div><h2>{section.heading}</h2><p>{section.body}</p></div></section>)}<aside className="policy-note"><strong>Important</strong><p>This page is a working website draft, not legal advice and not a representation that Aura Studio is compliant in every country. Confirm the operating entity, markets, providers and service rules, then obtain jurisdiction-specific legal review before launch.</p></aside></article></main>;
 }
 
 function NotFoundPage() {
-  return <main className="empty-state section-pad"><span className="eyebrow">404 · Page not found</span><h1>Not this<br /><em>way.</em></h1><p>The page you are looking for may have moved.</p><Link className="button button-dark" to="/">Back to Aura</Link></main>;
+  return <main className="empty-state section-pad"><h1>Not this<br /><em>way.</em></h1><p>The page you are looking for may have moved.</p><Link className="button button-dark" to="/">Back to Aura</Link></main>;
 }
 
 function App() {
