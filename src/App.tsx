@@ -492,9 +492,9 @@ function HomePage() {
       <section className="journal-teaser section-pad">
         <div className="section-head"><div><h2>Notes on living<br /><em>well.</em></h2></div><Link className="text-link" to="/journal">Read the journal</Link></div>
         <div className="journal-grid">
-          <JournalCard category="Travel" title="The art of arriving well" image={ASSETS.lifestyle} to="/journal" />
-          <JournalCard category="Style" title="A wardrobe with intention" image={ASSETS.dress} to="/journal" />
-          <JournalCard category="Wellbeing" title="Making space to reset" image={ASSETS.sustainability} to="/journal" />
+          <JournalCard title="The art of arriving well" image={ASSETS.lifestyle} to="/journal" />
+          <JournalCard title="A wardrobe with intention" image={ASSETS.dress} to="/journal" />
+          <JournalCard title="Making space to reset" image={ASSETS.sustainability} to="/journal" />
         </div>
       </section>
       <Newsletter />
@@ -506,7 +506,7 @@ function StandardItem({ icon, title, body }: { icon: string; title: string; body
   return <div className="standard-item"><span className="material-symbols-outlined" aria-hidden="true">{icon}</span><h3>{title}</h3><p>{body}</p></div>;
 }
 
-function JournalCard({ category, title, image, to }: { category: string; title: string; image: string; to: string }) {
+function JournalCard({ title, image, to }: { title: string; image: string; to: string }) {
   return <Link className="journal-card" to={to}><div className="journal-card-image"><img src={image} alt="" loading="lazy" /></div><h3>{title}</h3><span className="text-link">Coming to the journal</span></Link>;
 }
 
