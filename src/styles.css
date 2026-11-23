@@ -2809,3 +2809,38 @@ p { line-height: var(--leading-body); }
   }
   .bag-link { font-size: 11px; }
 }
+
+
+/* Final navigation weight correction: keep the header typography genuinely light */
+.site-header .primary-nav > a,
+.site-header .primary-nav > .nav-actions > .bag-link {
+  font-family: "DM Sans", Arial, sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 300 !important;
+  letter-spacing: .075em !important;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+.site-header .primary-nav > .nav-actions > .bag-link {
+  padding: 6px 10px !important;
+  border-width: .6px !important;
+}
+.site-header .primary-nav > .nav-actions > .bag-link span {
+  font-weight: 300 !important;
+}
+.site-header .primary-nav > .nav-actions .icon-button {
+  font-weight: 300 !important;
+}
+.site-header .mobile-menu-button span {
+  height: .75px !important;
+}
+@media (max-width: 680px) {
+  .site-header .primary-nav > a {
+    font-size: 12px !important;
+    font-weight: 300 !important;
+    letter-spacing: .065em !important;
+  }
+  .site-header .primary-nav > .nav-actions > .bag-link {
+    font-size: 11px !important;
+  }
+}
