@@ -13,11 +13,7 @@ import {
 } from "react-router-dom";
 import BlurText from "./components/BlurText";
 import homeHeroImage from "./assets/images/clothing/aura_clothing_abstract_motion_editorial_photograph_aura_clothing_abstr.png";
-import clothingCampaignImage from "./assets/images/clothing/full_width_fashion_editorial_campaign_photograph_for_aura_studio_cloth.png";
-import clothingLookOneImage from "./assets/images/clothing/aura_clothing_full_look_editorial_photograph_aura_clothing_full_look..png";
-import clothingLookTwoImage from "./assets/images/clothing/aura_clothing_campaign_hero_editorial_photograph_16_9_landscape._dream_1.png";
 import clothingLookThreeImage from "./assets/images/clothing/aura_clothing_material_detail_editorial_photograph_aura_clothing_mater.png";
-import clothingLookFourImage from "./assets/images/clothing/original_high_fashion_editorial_campaign_photograph_for_aura_clothing..png";
 import clothingCampaignAltImage from "./assets/images/clothing/aura_clothing_campaign_hero_editorial_photograph_16_9_landscape._dream.png";
 import clothingPortraitImage from "./assets/images/clothing/intimate_original_editorial_fashion_portrait_for_aura_clothing._an_ele.png";
 import spaInteriorImage from "./assets/images/spa/architectural_interior_transition_sanctuary_photograph_for_aura_studio.png";
@@ -543,7 +539,7 @@ function HomePage() {
             <img src={ASSETS.transferHero} alt="" aria-hidden="true" loading="lazy" decoding="async" />
             <div className="division-copy">
               <h3>Transfers</h3>
-              <p>Private airport transfers for selected journeys in Cape Town.</p>
+              <p>Cape Town airport transfers are available for selected journeys only.</p>
               <span className="division-action">Explore transfers</span>
             </div>
           </Link>
