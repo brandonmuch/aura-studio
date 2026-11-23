@@ -1127,3 +1127,22 @@ h1 em, h2 em, h3 em, h4 em, .hero-title em,
   padding: 12px 14px;
   background: #e8e2d6;
 }
+
+
+/* Slimmer navigation for a lighter editorial header */
+.site-header {
+  min-height: 70px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.brand-main { font-size: 31px; }
+.brand-sub { font-size: 7px; }
+.primary-nav > a { padding: 8px 0; }
+.primary-nav > a::after { bottom: 3px; }
+.nav-actions { gap: 15px; }
+.bag-link { padding: 7px 13px; }
+@media (max-width: 680px) {
+  .site-header { min-height: 64px; }
+  .brand-main { font-size: 29px; }
+  .primary-nav { top: 64px; }
+}
