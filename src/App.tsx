@@ -174,7 +174,7 @@ const policyContent: Record<string, { title: string; eyebrow: string; intro: str
     sections: [
       { heading: "Booking requests", body: "A request is not a confirmed booking until Aura sends a confirmation with the service, date, time, location, price and any special conditions." },
       { heading: "Changes and cancellations", body: "The confirmation should explain how to change or cancel, the notice period, any refundable deposit or cancellation charge, and the process for delays or service disruption. Do not apply a single rule to every booking until each service has been reviewed." },
-      { heading: "Transfers", body: "Before confirmation, capture the agreed pick-up and destination details, date and time, passenger count, luggage needs, quoted fare, waiting-time rules and any agreed extras. Confirm any location or passenger limits in writing." },
+      { heading: "Transfers", body: "Airport transfers are currently available in Cape Town, South Africa only and are not offered in Zimbabwe. Before confirmation, capture the agreed pick-up and destination details, date and time, passenger count, luggage needs, quoted fare, waiting-time rules and any agreed extras. Confirm any location or passenger limits in writing." },
       { heading: "Spa appointments", body: "Before confirmation, disclose the treatment, duration, price, appointment location and cancellation terms. If a treatment requires health or suitability information, collect only what is necessary through a secure, purpose-specific process." },
     ],
   },
@@ -407,22 +407,22 @@ function HomePage() {
         <div className="home-hero-content">
           <span className="eyebrow">Aura Studio</span>
           <BlurText text="Luxury, without announcement." className="hero-title" delay={75} />
-          <p>Private transfers. Considered clothing. Restorative spa experiences.</p>
+          <p>Considered clothing. Cape Town airport transfers. Restorative spa experiences.</p>
           <Link className="button button-cream" to="/clothing">Shop the collection <span>↗</span></Link>
         </div>
-        <div className="hero-caption"><span>01 / 03</span><span>Thoughtfully considered</span></div>
+        <div className="hero-caption"><span>01 / 03</span><span>The Aura experience</span></div>
       </section>
 
-      <section className="division-section section-pad">
-        <div className="section-head">
-          <div><span className="eyebrow">The Aura experience</span><h2>Three ways to<br /><em>feel the difference.</em></h2></div>
-          <p>Distinct in purpose. Connected by care.</p>
+      <section className="home-campaign home-campaign--clothing" aria-labelledby="home-clothing-title">
+        <img src={ASSETS.dress} alt="Editorial clothing image from the temporary collection preview" loading="lazy" />
+        <div className="home-campaign-shade" />
+        <div className="home-campaign-copy home-campaign-copy--left">
+          <span className="eyebrow">Aura Clothing · The collection</span>
+          <h2 id="home-clothing-title">A wardrobe,<br />considered.</h2>
+          <p>Pieces chosen with intention. An easier relationship with getting dressed.</p>
+          <Link className="button button-cream" to="/clothing">Discover the collection <span>↗</span></Link>
         </div>
-        <div className="division-grid">
-          <DivisionCard number="01" title="Aura Transfers" description="Arrive well. Private journeys, thoughtfully handled." action="Explore transfers" to="/transfers" image={ASSETS.lifestyle} theme="dark" />
-          <DivisionCard number="02" title="Aura Clothing" description="Wear your ease. A considered approach to everyday style." action="Explore clothing" to="/clothing" image={ASSETS.dress} theme="light" />
-          <DivisionCard number="03" title="Aura Spa" description="Make room to reset. Restorative moments, made personal." action="Explore spa" to="/spa" image={ASSETS.sustainability} theme="spa" />
-        </div>
+        <div className="home-campaign-caption"><span>02 / 03</span><span>Aura Clothing</span></div>
       </section>
 
       <section className="shop-feature section-pad" aria-labelledby="shop-feature-title">
@@ -451,6 +451,22 @@ function HomePage() {
         <p className="shop-feature-note">Preview imagery only. Product photography, prices and options will be confirmed before orders open.</p>
       </section>
 
+      <section className="home-campaign home-campaign--experiences" aria-labelledby="home-experiences-title">
+        <img src={ASSETS.lifestyle} alt="Editorial travel image from the temporary design image set" loading="lazy" />
+        <div className="home-campaign-shade home-campaign-shade--deep" />
+        <div className="home-campaign-copy home-campaign-copy--centre">
+          <span className="eyebrow">Aura experiences</span>
+          <h2 id="home-experiences-title">Arrive well.<br />Make room to reset.</h2>
+          <p>Thoughtful airport transfers in Cape Town, alongside restorative spa experiences.</p>
+          <div className="home-campaign-actions">
+            <Link className="button button-cream" to="/transfers">Cape Town airport transfers <span>↗</span></Link>
+            <Link className="button button-outline-light" to="/spa">Explore Aura Spa <span>↗</span></Link>
+          </div>
+          <span className="home-campaign-location">Airport transfers available in Cape Town, South Africa only.</span>
+        </div>
+        <div className="home-campaign-caption"><span>03 / 03</span><span>Move well. Feel well.</span></div>
+      </section>
+
       <section className="story-split">
         <div className="story-image"><img src={ASSETS.mobileHero} alt="Editorial image from the website design template" loading="lazy" /></div>
         <div className="story-copy"><span className="eyebrow">The Aura standard</span><h2>An elevated experience,<br /><em>in every detail.</em></h2><p>True luxury is not about excess. It is the feeling of being looked after, with care that is considered, consistent and quietly confident.</p><Link className="text-link" to="/about">Our story <span>↗</span></Link></div>
@@ -475,16 +491,6 @@ function HomePage() {
   );
 }
 
-function DivisionCard({ number, title, description, action, to, image, theme }: { number: string; title: string; description: string; action: string; to: string; image: string; theme: string }) {
-  return (
-    <Link className={`division-card division-card--${theme}`} to={to}>
-      <img src={image} alt="" loading="lazy" />
-      <span className="division-number">{number} / AURA STUDIO</span>
-      <div className="division-copy"><h3>{title}</h3><p>{description}</p><span className="division-action">{action} <b>↗</b></span></div>
-    </Link>
-  );
-}
-
 function StandardItem({ icon, title, body }: { icon: string; title: string; body: string }) {
   return <div className="standard-item"><span>{icon}</span><h3>{title}</h3><p>{body}</p></div>;
 }
@@ -505,9 +511,34 @@ function PageHero({ eyebrow, title, intro, image, imageAlt = "" }: { eyebrow: st
 }
 
 function TransfersPage() {
-  return <main><PageHero eyebrow="Aura Transfers" title={<>Arrive well.<br /><em>Every time.</em></>} intro="Private journeys shaped around your time, your route and the way you want to travel." image={ASSETS.lifestyle} imageAlt="Editorial lifestyle photograph from the temporary template image set" /><section className="feature-text section-pad"><div><span className="eyebrow">A more considered journey</span><h2>Good travel is felt<br /><em>before you arrive.</em></h2></div><div><p>From the first enquiry to the final drop-off, Aura Transfers is designed around thoughtful service, clear communication and a smooth experience.</p><p>Share your travel details and the team can confirm availability, vehicle suitability and a quote before anything is booked.</p></div></section><section className="service-detail-grid"><div><span className="eyebrow">01 / Private journeys</span><h3>Travel on your terms.</h3><p>Tell us where you are going, when you need to be there and anything the journey should account for.</p></div><div><span className="eyebrow">02 / Airport transfers</span><h3>A calmer arrival.</h3><p>Share your flight and pick-up details so the journey can be planned with the right information.</p></div><div><span className="eyebrow">03 / Clear confirmation</span><h3>No surprises.</h3><p>Receive a written confirmation of the route, agreed fare and any conditions before payment.</p></div></section><EnquiryPanel kind="transfer" title="Plan your journey" intro="Tell us a little about your trip. We will take it one step at a time." /></main>;
+  return (
+    <main>
+      <PageHero
+        eyebrow="Aura Transfers · Cape Town"
+        title={<>Arrive well.<br /><em>In Cape Town.</em></>}
+        intro="Private airport transfers in Cape Town, South Africa, arranged with care from arrival to drop-off."
+        image={ASSETS.lifestyle}
+        imageAlt="Editorial travel image from the temporary design image set"
+      />
+      <section className="feature-text section-pad">
+        <div>
+          <span className="eyebrow">A more considered arrival</span>
+          <h2>Good travel is felt<br /><em>before you arrive.</em></h2>
+        </div>
+        <div>
+          <p>Aura airport transfers are currently available in Cape Town, South Africa only. Airport transfers in Zimbabwe are not currently offered.</p>
+          <p>Share your flight and journey details so the requested pick-up can be reviewed and confirmed before you travel.</p>
+        </div>
+      </section>
+      <section className="service-detail-grid">
+        <div><span className="eyebrow">01 / Arrivals</span><h3>A calmer arrival.</h3><p>Share your flight details and arrival time so your requested airport pick-up can be planned.</p></div>
+        <div><span className="eyebrow">02 / Departures</span><h3>Leave with ease.</h3><p>Arrange a Cape Town airport drop-off with the pick-up details and timing agreed in advance.</p></div>
+        <div><span className="eyebrow">03 / Clear confirmation</span><h3>No surprises.</h3><p>Receive written confirmation of the route, agreed fare and any conditions before payment.</p></div>
+      </section>
+      <EnquiryPanel kind="transfer" title="Plan your Cape Town transfer" intro="Tell us a little about your flight and journey. We will take it one step at a time." />
+    </main>
+  );
 }
-
 function ClothingPage() {
   const [filter, setFilter] = useState("All");
   const [quickAddSlug, setQuickAddSlug] = useState<string | null>(null);
@@ -950,7 +981,7 @@ function FaqPage() {
     ["How do I book a transfer?", "Send a transfer enquiry with your route and preferred travel date. A booking is only confirmed once Aura has provided written confirmation."],
     ["Can I shop the clothing collection now?", "The clothing section is currently a visual preview. Product names, sizes, prices, stock and fulfilment information will be added before sales open."],
     ["How do I book a spa appointment?", "Use the spa enquiry form to share what you are looking for. The service menu and appointment availability will be confirmed before bookings open."],
-    ["Which countries does Aura serve?", "Service areas and shipping destinations are being confirmed. The site will list available destinations before accepting a booking or order."],
+    ["Where are airport transfers available?", "Airport transfers are currently available in Cape Town, South Africa only. Aura does not currently offer airport transfers in Zimbabwe. Clothing delivery and spa availability are confirmed separately."],
     ["How are card payments handled?", "The intended setup is a hosted payment page from the selected payment provider. Aura will not ask customers to send card details by email, phone or message."],
     ["How do I change my privacy choices?", "Use Cookie settings in the footer to reopen the preference panel. You can also read the privacy and cookie policies for more information."],
   ];
