@@ -2677,3 +2677,68 @@ p { line-height: var(--leading-body); }
     max-width: none;
   }
 }
+
+
+/* Final alignment correction: centre the homepage hero content on the image. */
+.home-hero {
+  justify-content: center !important;
+  text-align: center !important;
+}
+.home-hero-content {
+  display: flex !important;
+  flex: 0 1 100% !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 1040px) !important;
+  max-width: 1040px !important;
+  margin-inline: auto !important;
+  text-align: center !important;
+}
+.home-hero-content .hero-title,
+.home-hero-content .blur-text-lines {
+  width: 100%;
+  max-width: 1040px !important;
+  text-align: center !important;
+}
+.home-hero-content > p {
+  max-width: 650px !important;
+  margin: 0 auto 30px !important;
+  text-align: center !important;
+}
+.home-hero-content > .button {
+  align-self: center;
+  margin-inline: auto !important;
+}
+.home-hero-shade {
+  background: linear-gradient(0deg, rgba(10, 13, 10, .56), rgba(10, 13, 10, .24) 55%, rgba(10, 13, 10, .2)) !important;
+}
+
+/* Keep every line of copy on the three image-led experience cards white. */
+.division-card .division-copy,
+.division-card .division-copy h3,
+.division-card .division-copy p,
+.division-card .division-copy .division-action {
+  color: #fff !important;
+}
+@media (max-width: 680px) {
+  .home-hero {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .home-hero-content {
+    width: 90% !important;
+    max-width: 90% !important;
+    margin-inline: auto !important;
+    align-items: center;
+    text-align: center !important;
+  }
+  .home-hero-content .hero-title,
+  .home-hero-content .blur-text-lines,
+  .home-hero-content > p {
+    text-align: center !important;
+  }
+  .home-hero-content > p {
+    margin-inline: auto !important;
+  }
+}
