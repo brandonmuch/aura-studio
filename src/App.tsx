@@ -12,6 +12,7 @@ import {
   useParams,
 } from "react-router-dom";
 import BlurText from "./components/BlurText";
+import SpotlightCard from "./components/SpotlightCard";
 import homeHeroImage from "./assets/images/clothing/aura_clothing_abstract_motion_editorial_photograph_aura_clothing_abstr.png";
 import clothingLookThreeImage from "./assets/images/clothing/aura_clothing_material_detail_editorial_photograph_aura_clothing_mater.png";
 import clothingCampaignAltImage from "./assets/images/clothing/aura_clothing_campaign_hero_editorial_photograph_16_9_landscape._dream.png";
@@ -90,6 +91,7 @@ type Product = {
 
 const ASSETS = {
   hero: homeHeroImage,
+  homepageHero: clothingCampaignAltImage,
   clothingCampaign: clothingLookThreeImage,
   clothingCampaignAlt: clothingCampaignAltImage,
   dress: "https://e-commerce-clothing-women.vercel.app/ElbaDressOff-WhiteFreeTheLabel4.webp",
@@ -512,11 +514,13 @@ function HomePage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <section className="home-hero">
-        <img className="home-hero-image" src={ASSETS.hero} alt="" aria-hidden="true" fetchPriority="high" decoding="async" />
+        <picture className="home-hero-media">
+          <source media="(max-width: 680px)" srcSet={ASSETS.clothingPortrait} />
+          <img className="home-hero-image" src={ASSETS.homepageHero} alt="" aria-hidden="true" fetchPriority="high" decoding="async" />
+        </picture>
         <div className="home-hero-shade" />
         <div className="home-hero-content">
-          
-          <BlurText text="Luxury, without announcement." className="hero-title" delay={75} />
+          <BlurText text={"Luxury, without\nannouncement."} className="hero-title" delay={75} />
           <p>Considered clothing. Thoughtful transfers. Restorative spa experiences.</p>
           <Link className="button button-cream" to="/clothing">Shop the collection</Link>
         </div>
@@ -528,30 +532,30 @@ function HomePage() {
           <p>Three considered experiences.<br />One point of view.</p>
         </div>
         <div className="division-grid">
-          <Link className="division-card division-card--clothing" to="/clothing">
+          <SpotlightCard className="division-card division-card--clothing" to="/clothing">
             <img src={ASSETS.clothingCampaign} alt="" aria-hidden="true" loading="lazy" decoding="async" />
             <div className="division-copy">
               <h3>Clothing</h3>
               <p>Considered pieces and silhouettes for a more intentional wardrobe.</p>
               <span className="division-action">Explore clothing</span>
             </div>
-          </Link>
-          <Link className="division-card division-card--transfers" to="/transfers">
+          </SpotlightCard>
+          <SpotlightCard className="division-card division-card--transfers" to="/transfers">
             <img src={ASSETS.transferHero} alt="" aria-hidden="true" loading="lazy" decoding="async" />
             <div className="division-copy">
               <h3>Transfers</h3>
               <p>Cape Town airport transfers are available for selected journeys only.</p>
               <span className="division-action">Explore transfers</span>
             </div>
-          </Link>
-          <Link className="division-card division-card--spa" to="/spa">
+          </SpotlightCard>
+          <SpotlightCard className="division-card division-card--spa" to="/spa">
             <img src={ASSETS.spaHero} alt="" aria-hidden="true" loading="lazy" decoding="async" />
             <div className="division-copy">
               <h3>Spa</h3>
               <p>Restorative experiences shaped around care and wellbeing.</p>
               <span className="division-action">Explore Aura Spa</span>
             </div>
-          </Link>
+          </SpotlightCard>
         </div>
       </section>
 
@@ -564,12 +568,12 @@ function HomePage() {
           <Link className="text-link" to="/clothing">Explore all clothing</Link>
         </div>
         <div className="shop-feature-grid">
-          {products.slice(0, 3).map((product) => {
+          {products.slice(0, 4).map((product) => {
             const wasAdded = addedSlug === product.slug;
             return (
               <article className="shop-feature-card" key={product.slug}>
                 <Link className="shop-feature-image" to={`/product/${product.slug}`} aria-label={`View ${product.name}`}>
-                  <img src={product.image} alt={`Product preview for ${product.name}`} loading="lazy" decoding="async" />
+                  <img src={product.image} alt={`Product preview for ${product.name}`} sizes="(max-width: 680px) 44vw, (max-width: 1000px) 45vw, 23vw" loading="lazy" decoding="async" />
                 </Link>
                 <div className="shop-feature-card-meta">
                   <div><h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3><p>Collection preview</p></div>
