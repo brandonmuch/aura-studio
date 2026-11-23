@@ -509,13 +509,89 @@ function TransfersPage() {
 }
 
 function ClothingPage() {
-  const [saved, setSaved] = useState<string[]>([]);
   const [filter, setFilter] = useState("All");
+  const [quickAddSlug, setQuickAddSlug] = useState<string | null>(null);
+  const [addedSlug, setAddedSlug] = useState<string | null>(null);
+  const { addItem, items } = useCart();
   const categories = ["All", "Clothing"];
   const visible = products.filter((product) => filter === "All" || product.category === filter);
-  return <main><PageHero eyebrow="Aura Clothing" title={<>Wear your ease.<br />Move with intention.</>} intro="Explore considered pieces designed for everyday wear." image={ASSETS.hero} imageAlt="Editorial clothing image from the temporary template set" /><section className="catalogue-section section-pad"><div className="catalogue-heading"><div><span className="eyebrow">Shop the collection</span><h2>Clothing</h2></div><div className="catalogue-tools"><span>New pieces will be added as the collection is released.</span><div className="filter-tabs" role="group" aria-label="Filter collection">{categories.map((category) => <button className={filter === category ? "is-active" : ""} onClick={() => setFilter(category)} key={category}>{category}</button>)}</div></div></div><div className="product-grid">{visible.map((product, index) => <article className="product-card" key={product.slug}><Link to={`/product/${product.slug}`} className="product-image"><img src={product.image} alt={product.note} loading="lazy" /><span className="product-index">0{index + 1}</span></Link><div className="product-card-meta"><div><h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3><p>View product details</p></div><button className={saved.includes(product.slug) ? "save-button is-saved" : "save-button"} onClick={() => setSaved((items) => items.includes(product.slug) ? items.filter((item) => item !== product.slug) : [...items, product.slug])} aria-label={saved.includes(product.slug) ? "Remove from saved items" : "Save item"}>{saved.includes(product.slug) ? "♥" : "♡"}</button></div></article>)}</div><p className="catalogue-note">The current images are temporary design references. Final product photography, descriptions, sizes, stock and prices will be loaded before orders open.</p></section></main>;
-}
+  const bagCount = items.reduce((total, item) => total + item.quantity, 0);
 
+  const openQuickAdd = (slug: string) => {
+    setQuickAddSlug((current) => current === slug ? null : slug);
+    setAddedSlug(null);
+  };
+
+  return (
+    <main>
+      <PageHero eyebrow="Aura Clothing" title={<>Wear your ease.<br />Move with intention.</>} intro="Explore considered pieces designed for everyday wear." image={ASSETS.hero} imageAlt="Editorial clothing image from the temporary template set" />
+      <section className="catalogue-section section-pad">
+        <div className="catalogue-heading">
+          <div><span className="eyebrow">Shop the collection</span><h2>Clothing</h2></div>
+          <div className="catalogue-tools">
+            <span>New pieces will be added as the collection is released.</span>
+            <div className="filter-tabs" role="group" aria-label="Filter collection">
+              {categories.map((category) => <button className={filter === category ? "is-active" : ""} onClick={() => setFilter(category)} key={category}>{category}</button>)}
+            </div>
+          </div>
+        </div>
+
+        <div className="product-grid">
+          {visible.map((product, index) => {
+            const isOpen = quickAddSlug === product.slug;
+            const wasAdded = addedSlug === product.slug;
+            return (
+              <article className="product-card" key={product.slug}>
+                <Link to={`/product/${product.slug}`} className="product-image">
+                  <img src={product.image} alt={product.note} loading="lazy" />
+                  <span className="product-index">0{index + 1}</span>
+                </Link>
+                <div className="product-card-meta">
+                  <div>
+                    <h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3>
+                    <p>View product details</p>
+                  </div>
+                  <button
+                    className={isOpen ? "quick-add-toggle is-open" : "quick-add-toggle"}
+                    type="button"
+                    aria-label={isOpen ? `Close quick add for ${product.name}` : `Show purchase options for ${product.name}`}
+                    aria-expanded={isOpen}
+                    aria-controls={`quick-add-${product.slug}`}
+                    onClick={() => openQuickAdd(product.slug)}
+                  >
+                    <span aria-hidden="true">+</span>
+                  </button>
+                </div>
+                {isOpen && (
+                  <div className="quick-add-panel" id={`quick-add-${product.slug}`}>
+                    {wasAdded ? (
+                      <div className="quick-add-confirmation" role="status">
+                        <span>Added to bag</span>
+                        <Link to="/cart">View bag ({bagCount}) <span aria-hidden="true">↗</span></Link>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          className="button button-dark button-small"
+                          type="button"
+                          onClick={() => { addItem(product.slug); setAddedSlug(product.slug); }}
+                        >
+                          Add to bag
+                        </button>
+                        <Link className="quick-add-details" to={`/product/${product.slug}`}>View details</Link>
+                      </>
+                    )}
+                  </div>
+                )}
+              </article>
+            );
+          })}
+        </div>
+        <p className="catalogue-note">The current images are temporary design references. Final product photography, descriptions, sizes, stock and prices will be loaded before orders open.</p>
+      </section>
+    </main>
+  );
+}
 function ProductPage() {
   const { slug } = useParams();
   const product = products.find((item) => item.slug === slug);
@@ -722,11 +798,153 @@ function JournalPage() {
   return <main><PageHero eyebrow="The journal" title={<>Notes on living<br /><em>well.</em></>} intro="Stories, observations and small reminders to move through life with a little more intention." /><section className="section-pad"><div className="journal-grid journal-grid-large">{entries.map((entry) => <article className="journal-card journal-card-static" key={entry.category}><div className="journal-card-image"><img src={entry.image} alt="" loading="lazy" /></div><span className="eyebrow">{entry.category} · Coming soon</span><h3>{entry.title}</h3><p>{entry.body}</p></article>)}</div><p className="catalogue-note">Journal articles are editorial placeholders and will be written and reviewed before publication.</p></section></main>;
 }
 
+type ContactValues = {
+  name: string;
+  email: string;
+  phone: string;
+  interest: string;
+  message: string;
+  privacyAcknowledged: boolean;
+};
+
 function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
-  return <main><PageHero eyebrow="Contact" title={<>Let's begin<br /><em>with a conversation.</em></>} intro="Whether you are planning a journey, exploring the collection or looking for a moment to reset, we would be glad to hear from you." /><section className="contact-layout section-pad"><div><span className="eyebrow">Get in touch</span><h2>Tell us what<br /><em>you have in mind.</em></h2><p>Official contact details will be added once Aura's business email, telephone and service locations are confirmed.</p><p className="contact-placeholder">Business contact details to be confirmed before launch.</p></div><form className="enquiry-form" onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }}><div className="form-row"><label>Your name<input required autoComplete="name" /></label><label>Email address<input required type="email" autoComplete="email" /></label></div><label>I'm interested in<select defaultValue=""><option value="" disabled>Choose a division</option><option>Transfers</option><option>Clothing</option><option>Spa</option><option>Something else</option></select></label><label>Your message<textarea rows={5} required /></label><button className="button button-dark" type="submit">Preview message <span>↗</span></button>{submitted && <p className="form-status" role="status">This preview form is not connected to an inbox. Your message has not been sent.</p>}</form></section></main>;
+  return (
+    <main>
+      <PageHero eyebrow="Contact" title={<>Let's begin<br /><em>with a conversation.</em></>} intro="Whether you are planning a journey, exploring the collection or looking for a moment to reset, we would be glad to hear from you." />
+      <section className="contact-layout section-pad">
+        <div>
+          <span className="eyebrow">Get in touch</span>
+          <h2>Tell us what<br /><em>you have in mind.</em></h2>
+          <p>Share a little about what you need. We will take it one step at a time, and you can go back to make changes before finishing.</p>
+          <p className="contact-placeholder">Official contact details will be added once Aura's business email, telephone and service locations are confirmed.</p>
+        </div>
+        <ContactFlow />
+      </section>
+    </main>
+  );
 }
 
+function ContactFlow() {
+  const [step, setStep] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+  const [values, setValues] = useState<ContactValues>({
+    name: "",
+    email: "",
+    phone: "",
+    interest: "",
+    message: "",
+    privacyAcknowledged: false,
+  });
+  const steps = ["Your name", "Contact details", "What brings you here?", "Your message", "Before you finish"];
+
+  const update = <Key extends keyof ContactValues>(key: Key, value: ContactValues[Key]) => {
+    setValues((current) => ({ ...current, [key]: value }));
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (step < steps.length - 1) {
+      setStep((current) => current + 1);
+      return;
+    }
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="enquiry-flow contact-flow">
+      {!submitted ? (
+        <>
+          <div className="enquiry-flow-top">
+            <span>Step {step + 1} of {steps.length}</span>
+            <span>{Math.round(((step + 1) / steps.length) * 100)}% complete</span>
+          </div>
+          <div
+            className="enquiry-progress"
+            role="progressbar"
+            aria-label="Contact form progress"
+            aria-valuemin={0}
+            aria-valuemax={steps.length}
+            aria-valuenow={step + 1}
+          >
+            <span style={{ width: `${((step + 1) / steps.length) * 100}%` }} />
+          </div>
+          <form className="enquiry-form enquiry-step-form" onSubmit={handleSubmit}>
+            <div className="enquiry-step-content" key={step} aria-live="polite">
+              <span className="eyebrow">Contact Aura</span>
+              <h3>{steps[step]}</h3>
+
+              {step === 0 && (
+                <label htmlFor="contact-name">What should we call you?
+                  <input id="contact-name" name="name" autoComplete="name" autoFocus required value={values.name} onChange={(event) => update("name", event.target.value)} placeholder="Your name" />
+                </label>
+              )}
+
+              {step === 1 && (
+                <>
+                  <label htmlFor="contact-email">What's the best email address to reach you?
+                    <input id="contact-email" name="email" type="email" autoComplete="email" autoFocus required value={values.email} onChange={(event) => update("email", event.target.value)} placeholder="you@example.com" />
+                  </label>
+                  <label htmlFor="contact-phone">Phone number <span className="field-optional">Optional</span>
+                    <input id="contact-phone" name="phone" type="tel" autoComplete="tel" value={values.phone} onChange={(event) => update("phone", event.target.value)} placeholder="Your contact number" />
+                  </label>
+                </>
+              )}
+
+              {step === 2 && (
+                <label htmlFor="contact-interest">What are you getting in touch about?
+                  <select id="contact-interest" name="interest" autoFocus required value={values.interest} onChange={(event) => update("interest", event.target.value)}>
+                    <option value="" disabled>Choose a topic</option>
+                    <option>Transfers</option>
+                    <option>Clothing</option>
+                    <option>Spa</option>
+                    <option>Something else</option>
+                  </select>
+                </label>
+              )}
+
+              {step === 3 && (
+                <label htmlFor="contact-message">How can we help?
+                  <textarea id="contact-message" rows={5} name="message" autoFocus required value={values.message} onChange={(event) => update("message", event.target.value)} placeholder="Tell us a little about what you have in mind..." />
+                </label>
+              )}
+
+              {step === 4 && (
+                <div className="enquiry-consent">
+                  <p className="enquiry-consent-intro">One last thing before you finish.</p>
+                  <div className="consent-check">
+                    <input
+                      id="contact-privacy"
+                      name="privacyAcknowledged"
+                      type="checkbox"
+                      required
+                      checked={values.privacyAcknowledged}
+                      onChange={(event) => update("privacyAcknowledged", event.target.checked)}
+                    />
+                    <label htmlFor="contact-privacy">I have read the Privacy Policy and understand how my details will be used to respond to this message.</label>
+                  </div>
+                  <p className="enquiry-terms-note">
+                    Please read our <Link to="/policies/privacy">Privacy Policy</Link>. Any booking or purchase will be subject to the relevant <Link to="/policies/terms">Terms and Conditions</Link, which will be provided before you commit.
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="enquiry-step-actions">
+              <button className="enquiry-back" type="button" onClick={() => setStep((current) => Math.max(0, current - 1))} disabled={step === 0}>Back</button>
+              <button className="button button-dark" type="submit">{step === steps.length - 1 ? "Complete message preview" : "Continue"} <span>↗</span></button>
+            </div>
+          </form>
+        </>
+      ) : (
+        <div className="enquiry-complete" role="status">
+          <span className="eyebrow">Thank you</span>
+          <h3>Your message is ready.</h3>
+          <p>This is a design preview. Your message has not been sent or stored. A secure contact route will be connected before launch.</p>
+          <button className="enquiry-back" type="button" onClick={() => { setSubmitted(false); setStep(0); }}>Start again</button>
+        </div>
+      )}
+    </div>
+  );
+}
 function FaqPage() {
   const faqs = [
     ["How do I book a transfer?", "Send a transfer enquiry with your route and preferred travel date. A booking is only confirmed once Aura has provided written confirmation."],
