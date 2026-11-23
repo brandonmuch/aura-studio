@@ -205,6 +205,6 @@ test("main navigation exposes its state and controlled menu on mobile", async ({
   await expect(page.getByRole("button", { name: "Close menu" })).toHaveAttribute("aria-expanded", "true");
   await expect(navigation.getByRole("link", { name: "Home" })).toBeVisible();
   await navigation.getByRole("link", { name: "Clothing" }).click();
-  await expect(page).toHaveURL(/\\/clothing$/);
+  await expect(page).toHaveURL(/clothing$/);
   await expect(page.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
 });
