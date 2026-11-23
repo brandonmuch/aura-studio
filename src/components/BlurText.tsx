@@ -1,5 +1,4 @@
 import { motion, useInView, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
 import { useMemo, useRef } from "react";
 
 type BlurTextProps = {
