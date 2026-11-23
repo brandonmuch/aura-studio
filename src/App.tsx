@@ -31,7 +31,7 @@ import transferVehicleImage from "./assets/images/transfers/aura_transfers_cape_
 import transferInteriorImage from "./assets/images/transfers/aura_transfers_interior_detail_editorial_photograph_aura_transfers_int.png";
 import transferArrivalImage from "./assets/images/transfers/editorial_cape_town_arrival_and_travel_photograph_for_aura_studio_aura.png";
 import aboutInteriorImage from "./assets/images/editorial/architectural_interior_and_material_study_for_aura_studio_aura_about.png";
-import blogFashionImage from "./assets/images/editorial/candid_art_directed_fashion_editorial_for_aura_studio_aura_blog_sty.png";
+import blogFashionImage from "./assets/images/editorial/candid_art_directed_fashion_editorial_for_aura_studio_aura_journal_sty.png";
 
 type CartLine = { slug: string; quantity: number };
 type CartContextValue = { items: CartLine[]; addItem: (slug: string) => void; updateQuantity: (slug: string, quantity: number) => void; removeItem: (slug: string) => void };
@@ -94,11 +94,11 @@ type Product = {
 
 const ASSETS = {
   hero: homeHeroImage,
-  clothingCampaign: clothingCampaignImage,
+  clothingCampaign: clothingLookThreeImage,
   clothingCampaignAlt: clothingCampaignAltImage,
   dress: clothingLookOneImage,
   miniDress: clothingLookTwoImage,
-  shirt: clothingLookThreeImage,
+  shirt: clothingCampaignImage,
   studio: clothingLookFourImage,
   clothingPortrait: clothingPortraitImage,
   lifestyle: transferJourneyImage,
@@ -106,6 +106,7 @@ const ASSETS = {
   transferDetail: transferInteriorImage,
   transferArrival: transferArrivalImage,
   sustainability: spaWaterImage,
+  spaWater: spaWaterImage,
   spaHero: spaHeroImage,
   spaStill: spaCeramicImage,
   spaTreatment: spaTreatmentImage,
@@ -545,7 +546,7 @@ function HomePage() {
           <Link className="text-link" to="/clothing">Explore all clothing</Link>
         </div>
         <div className="shop-feature-grid">
-          {products.slice(0, 3).map((product, index) => {
+          {products.slice(0, 3).map((product) => {
             const wasAdded = addedSlug === product.slug;
             return (
               <article className="shop-feature-card" key={product.slug}>

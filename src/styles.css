@@ -1205,7 +1205,6 @@ h1 em, h2 em, h3 em, h4 em, .hero-title em,
 }
 .skip-link:focus { transform: translateY(0); }
 :focus-visible { outline: 3px solid #40583b; outline-offset: 4px; }
-#main-content:focus { outline: none; }
 .section-pad { padding: var(--section-space) clamp(24px, 6.2vw, 88px); }
 .home-hero { height: clamp(560px, 74svh, 800px); min-height: 560px; }
 .home-hero-image { object-position: center; }
