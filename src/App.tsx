@@ -17,6 +17,7 @@ import homeHeroImage from "./assets/images/clothing/aura_clothing_abstract_motio
 import clothingLookThreeImage from "./assets/images/clothing/aura_clothing_material_detail_editorial_photograph_aura_clothing_mater.png";
 import clothingCampaignAltImage from "./assets/images/clothing/aura_clothing_campaign_hero_editorial_photograph_16_9_landscape._dream.png";
 import clothingPortraitImage from "./assets/images/clothing/intimate_original_editorial_fashion_portrait_for_aura_clothing._an_ele.png";
+import clothingFullLookImage from "./assets/images/clothing/aura_clothing_full_look_editorial_photograph_aura_clothing_full_look..png";
 import spaInteriorImage from "./assets/images/spa/architectural_interior_transition_sanctuary_photograph_for_aura_studio.png";
 import spaCeramicImage from "./assets/images/spa/aura_spa_ceramic_still_life_editorial_photograph_aura_spa_ceramic_stil.png";
 import spaHeroImage from "./assets/images/spa/aura_spa_hero_sanctuary_editorial_photograph_aura_spa_hero_sanctuary..png";
@@ -98,6 +99,7 @@ const ASSETS = {
   shirt: "https://e-commerce-clothing-women.vercel.app/Something-Borrowed-Shirt-Black-Half_1400x.webp",
   studio: "https://e-commerce-clothing-women.vercel.app/Somethingx.webp",
   clothingPortrait: clothingPortraitImage,
+  clothingLookbookPortrait: clothingFullLookImage,
   lifestyle: transferJourneyImage,
   transferHero: transferVehicleImage,
   transferDetail: transferInteriorImage,
@@ -223,6 +225,37 @@ const policyContent: Record<string, { title: string; intro: string; sections: { 
     ],
   },
 };
+
+function SectionTransitions() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
+
+    const sections = Array.from(document.querySelectorAll<HTMLElement>(
+      "#main-content > section:not(.home-hero):not(.page-hero), #main-content > article"
+    ));
+    if (!sections.length) return;
+
+    sections.forEach((section) => section.classList.add("section-reveal"));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+
+    sections.forEach((section) => observer.observe(section));
+    return () => {
+      observer.disconnect();
+      sections.forEach((section) => section.classList.remove("section-reveal", "is-visible"));
+    };
+  }, [pathname]);
+
+  return null;
+}
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -476,6 +509,7 @@ function AppShell() {
     <BrowserRouter>
       <CartProvider>
       <ScrollToTop />
+      <SectionTransitions />
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <Header />
       <Routes>
@@ -485,6 +519,7 @@ function AppShell() {
         <Route path="/product/:slug" element={<ProductPage />} />
         <Route path="/spa" element={<SpaPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
 
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/trust" element={<TrustPage />} />
@@ -665,7 +700,7 @@ function ClothingPage() {
       </section>
       <section className="clothing-lookbook" aria-label="Clothing editorial">
         <figure className="clothing-lookbook-image clothing-lookbook-image--portrait">
-          <img src={ASSETS.clothingPortrait} alt="Fashion portrait from the Aura clothing editorial" loading="lazy" decoding="async" />
+          <img src={ASSETS.clothingLookbookPortrait} alt="Full-look fashion editorial from the Aura clothing collection" loading="lazy" decoding="async" />
         </figure>
         <div className="clothing-lookbook-copy">
           <p className="clothing-editorial-kicker">01 / The feeling</p>
@@ -947,6 +982,154 @@ function EnquiryPanel({ kind, title, intro }: { kind: "transfer" | "spa"; title:
 
 function AboutPage() {
   return <main id="main-content" tabIndex={-1}><PageHero title={<>A more thoughtful<br /><em>kind of luxury.</em></>} intro="Aura Studio brings together travel, personal style and wellbeing under one considered point of view." image={ASSETS.about} imageAlt="Architectural interior and considered natural materials" /><section className="feature-text section-pad"><div><h2>It is the feeling<br /><em>of being looked after.</em></h2></div><div><p>We believe quality is as much about how something makes you feel as it is about how it looks. That belief shapes every part of Aura Studio.</p><p>Each division has its own purpose, but they share the same standard: clarity, care and thoughtful attention to detail.</p></div></section><section className="values-grid"><StandardItem icon="01" title="Consideration" body="Every choice begins with the person on the other side of it." /><StandardItem icon="02" title="Consistency" body="A premium experience should feel considered at every touchpoint." /><StandardItem icon="03" title="Integrity" body="Clear promises, honest information and accountability." /><StandardItem icon="04" title="Respect" body="Your time, choices, privacy and wellbeing matter." /></section></main>;
+}
+
+type ContactValues = {
+  name: string;
+  email: string;
+  phone: string;
+  interest: string;
+  message: string;
+  privacyAcknowledged: boolean;
+};
+
+function ContactPage() {
+  return (
+    <main id="main-content" tabIndex={-1}>
+      <PageHero title={<>Let's begin<br /><em>with a conversation.</em></>} intro="Whether you are planning a journey, exploring the collection or looking for a moment to reset, we would be glad to hear from you." />
+      <section className="contact-layout section-pad">
+        <div>
+          
+          <h2>Tell us what<br /><em>you have in mind.</em></h2>
+          <p>Share a little about what you need. We will take it one step at a time, and you can go back to make changes before finishing.</p>
+          <p className="contact-placeholder">Official contact details will be added once Aura's business email, telephone and service locations are confirmed.</p>
+        </div>
+        <ContactFlow />
+      </section>
+    </main>
+  );
+}
+
+function ContactFlow() {
+  const [step, setStep] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+  const [values, setValues] = useState<ContactValues>({
+    name: "",
+    email: "",
+    phone: "",
+    interest: "",
+    message: "",
+    privacyAcknowledged: false,
+  });
+  const steps = ["Your name", "Contact details", "What brings you here?", "Your message", "Before you finish"];
+
+  const update = <Key extends keyof ContactValues>(key: Key, value: ContactValues[Key]) => {
+    setValues((current) => ({ ...current, [key]: value }));
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (step < steps.length - 1) {
+      setStep((current) => current + 1);
+      return;
+    }
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="enquiry-flow contact-flow">
+      {!submitted ? (
+        <>
+          <div className="enquiry-flow-top">
+            <span>Step {step + 1} of {steps.length}</span>
+            <span>{Math.round(((step + 1) / steps.length) * 100)}% complete</span>
+          </div>
+          <div
+            className="enquiry-progress"
+            role="progressbar"
+            aria-label="Contact form progress"
+            aria-valuemin={0}
+            aria-valuemax={steps.length}
+            aria-valuenow={step + 1}
+          >
+            <span style={{ width: `${((step + 1) / steps.length) * 100}%` }} />
+          </div>
+          <form className="enquiry-form enquiry-step-form" onSubmit={handleSubmit}>
+            <div className="enquiry-step-content" key={step} aria-live="polite">
+              
+              <h3>{steps[step]}</h3>
+
+              {step === 0 && (
+                <label htmlFor="contact-name">What should we call you?
+                  <input id="contact-name" name="name" autoComplete="name" autoFocus required value={values.name} onChange={(event) => update("name", event.target.value)} placeholder="Your name" />
+                </label>
+              )}
+
+              {step === 1 && (
+                <>
+                  <label htmlFor="contact-email">What's the best email address to reach you?
+                    <input id="contact-email" name="email" type="email" autoComplete="email" autoFocus required value={values.email} onChange={(event) => update("email", event.target.value)} placeholder="you@example.com" />
+                  </label>
+                  <label htmlFor="contact-phone">Phone number <span className="field-optional">Optional</span>
+                    <input id="contact-phone" name="phone" type="tel" autoComplete="tel" value={values.phone} onChange={(event) => update("phone", event.target.value)} placeholder="Your contact number" />
+                  </label>
+                </>
+              )}
+
+              {step === 2 && (
+                <label htmlFor="contact-interest">What are you getting in touch about?
+                  <select id="contact-interest" name="interest" autoFocus required value={values.interest} onChange={(event) => update("interest", event.target.value)}>
+                    <option value="" disabled>Choose a topic</option>
+                    <option>Transfers</option>
+                    <option>Clothing</option>
+                    <option>Spa</option>
+                    <option>Something else</option>
+                  </select>
+                </label>
+              )}
+
+              {step === 3 && (
+                <label htmlFor="contact-message">How can we help?
+                  <textarea id="contact-message" rows={5} name="message" autoFocus required value={values.message} onChange={(event) => update("message", event.target.value)} placeholder="Tell us a little about what you have in mind..." />
+                </label>
+              )}
+
+              {step === 4 && (
+                <div className="enquiry-consent">
+                  <p className="enquiry-consent-intro">One last thing before you finish.</p>
+                  <div className="consent-check">
+                    <input
+                      id="contact-privacy"
+                      name="privacyAcknowledged"
+                      type="checkbox"
+                      required
+                      checked={values.privacyAcknowledged}
+                      onChange={(event) => update("privacyAcknowledged", event.target.checked)}
+                    />
+                    <label htmlFor="contact-privacy">I have read the Privacy Policy and understand how my details will be used to respond to this message.</label>
+                  </div>
+                  <p className="enquiry-terms-note">
+                    Please read our <Link to="/policies/privacy">Privacy Policy</Link>. Any booking or purchase will be subject to the relevant <Link to="/policies/terms">Terms and Conditions</Link>, which will be provided before you commit.
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="enquiry-step-actions">
+              <button className="enquiry-back" type="button" onClick={() => setStep((current) => Math.max(0, current - 1))} disabled={step === 0}>Back</button>
+              <button className="button button-dark" type="submit">{step === steps.length - 1 ? "Complete message preview" : "Continue"}</button>
+            </div>
+          </form>
+        </>
+      ) : (
+        <div className="enquiry-complete" role="status">
+          
+          <h3>Your message is ready.</h3>
+          <p>This is a design preview. Your message has not been sent or stored. A secure contact route will be connected before launch.</p>
+          <button className="enquiry-back" type="button" onClick={() => { setSubmitted(false); setStep(0); }}>Start again</button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function FaqPage() {

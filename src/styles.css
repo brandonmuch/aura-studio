@@ -2844,3 +2844,117 @@ p { line-height: var(--leading-body); }
     font-size: 11px !important;
   }
 }
+
+
+/* Mobile audit hardening and understated section reveals. */
+.home-hero-content {
+  left: 50% !important;
+  top: 50% !important;
+  width: min(88%, 1040px) !important;
+  max-width: 1040px !important;
+  margin: 0 !important;
+  transform: translate(-50%, -50%) !important;
+  text-align: center !important;
+}
+.home-hero-content .hero-title,
+.home-hero-content .blur-text-lines,
+.home-hero-content > p {
+  width: 100%;
+  margin-inline: auto;
+  text-align: center !important;
+}
+.home-hero-content > p {
+  max-width: 650px !important;
+}
+.section-reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition: opacity .7s cubic-bezier(.2, .65, .25, 1), transform .7s cubic-bezier(.2, .65, .25, 1);
+}
+.section-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+@media (max-width: 980px) {
+  .site-header {
+    gap: 18px;
+  }
+  .primary-nav {
+    flex-wrap: nowrap;
+  }
+  .primary-nav > a {
+    white-space: nowrap;
+  }
+}
+@media (max-width: 680px) {
+  .site-header {
+    min-height: 64px;
+    padding-inline: 6%;
+  }
+  .mobile-menu-button,
+  .site-header .icon-button {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+  }
+  .primary-nav {
+    top: 64px;
+    max-height: calc(100svh - 64px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: max(22px, env(safe-area-inset-bottom));
+  }
+  .primary-nav > a {
+    min-height: 44px;
+  }
+  .primary-nav .nav-actions {
+    min-height: 48px;
+  }
+  .primary-nav .bag-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .home-hero {
+    min-height: 600px;
+    height: min(720px, calc(100svh - 64px));
+  }
+  .home-hero-content {
+    left: 50% !important;
+    width: 88% !important;
+    max-width: 88% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  .home-hero-content .hero-title {
+    font-size: clamp(56px, 13vw, 78px);
+    line-height: .92;
+  }
+  .clothing-page .filter-tabs button {
+    min-height: 44px;
+  }
+  .product-detail-copy {
+    max-width: none;
+    min-width: 0;
+  }
+  .contact-layout,
+  .contact-flow,
+  .enquiry-flow {
+    min-width: 0;
+    width: 100%;
+  }
+  .cookie-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .cookie-actions .button {
+    min-height: 40px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .section-reveal,
+  .section-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
