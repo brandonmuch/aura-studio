@@ -471,10 +471,10 @@ function HomePage() {
         <div className="story-image"><img src={ASSETS.mobileHero} alt="Editorial image from the website design template" loading="lazy" /></div>
         <div className="story-copy"><span className="eyebrow">The Aura standard</span><h2>An elevated experience,<br /><em>in every detail.</em></h2><p>True luxury is not about excess. It is the feeling of being looked after, with care that is considered, consistent and quietly confident.</p><Link className="text-link" to="/about">Our story <span>↗</span></Link></div>
         <div className="standards-grid">
-          <StandardItem icon="◈" title="Privacy first" body="Clear choices and respectful handling of personal information." />
-          <StandardItem icon="◎" title="Secure payments" body="A hosted payment journey through a dedicated payment provider." />
-          <StandardItem icon="✳" title="Clear commitments" body="Transparent terms, pricing and booking information." />
-          <StandardItem icon="⌁" title="Considered design" body="An accessible, responsive experience across devices." />
+          <StandardItem icon="privacy_tip" title="Privacy first" body="Clear choices and respectful handling of personal information." />
+          <StandardItem icon="credit_card" title="Secure payments" body="A hosted payment journey through a dedicated payment provider." />
+          <StandardItem icon="fact_check" title="Clear commitments" body="Transparent terms, pricing and booking information." />
+          <StandardItem icon="devices" title="Considered design" body="An accessible, responsive experience across devices." />
         </div>
       </section>
 
@@ -492,7 +492,7 @@ function HomePage() {
 }
 
 function StandardItem({ icon, title, body }: { icon: string; title: string; body: string }) {
-  return <div className="standard-item"><span>{icon}</span><h3>{title}</h3><p>{body}</p></div>;
+  return <div className="standard-item"><span className="material-symbols-outlined" aria-hidden="true">{icon}</span><h3>{title}</h3><p>{body}</p></div>;
 }
 
 function JournalCard({ category, title, image, to }: { category: string; title: string; image: string; to: string }) {
