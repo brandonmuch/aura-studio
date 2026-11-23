@@ -32,6 +32,7 @@ test("shopper can add, adjust, persist and remove a bag item", async ({ page }) 
   await expect(quantity).toHaveText("2");
   await expect(page.getByRole("link", { name: "Shopping bag" })).toContainText("2");
 
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("aura-cart"))).toContain('"quantity":2');
   await page.reload();
   await expect(page.locator(".cart-quantity-value")).toHaveText("2");
   await page.getByRole("button", { name: "Decrease quantity of Look 01" }).click();
@@ -46,4 +47,34 @@ test("homepage reflows on a narrow mobile viewport without horizontal overflow",
   await expect(page.getByRole("heading", { name: "The clothing edit." })).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test("transfer enquiry follows a guided flow and shows policy acknowledgement before completion", async ({ page }) => {
+  await page.goto("/transfers");
+  await expect(page.getByRole("heading", { name: "Plan your journey" })).toBeVisible();
+
+  await page.getByLabel("What should we call you?").fill("Taylor Example");
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await page.getByLabel("What's the best email address to reach you?").fill("taylor@example.com");
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await page.getByLabel("Where should we collect you?").fill("OR Tambo International Airport");
+  await page.getByLabel("Where are you heading?").fill("Sandton");
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await page.getByLabel("What date would you like to travel?").fill("2026-12-10");
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  await expect(page.getByLabel("Anything else we should know? Optional")).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  const acknowledgement = page.getByRole("checkbox", { name: /I have read the Privacy Policy/ });
+  await expect(acknowledgement).toBeRequired();
+  await expect(page.getByRole("link", { name: "Terms and Conditions" })).toHaveAttribute("href", "/policies/terms");
+  await page.getByRole("button", { name: "Complete enquiry preview" }).click();
+  await expect(page.getByText(/not connected to a live inbox/)).toBeVisible();
+
+  await page.getByRole("button", { name: "Start again" }).click();
+  await expect(page.getByLabel("What should we call you?")).toBeVisible();
 });
