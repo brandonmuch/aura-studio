@@ -958,23 +958,6 @@ type ContactValues = {
   privacyAcknowledged: boolean;
 };
 
-function ContactPage() {
-  return (
-    <main id="main-content" tabIndex={-1}>
-      <PageHero title={<>Let's begin<br /><em>with a conversation.</em></>} intro="Whether you are planning a journey, exploring the collection or looking for a moment to reset, we would be glad to hear from you." />
-      <section className="contact-layout section-pad">
-        <div>
-          
-          <h2>Tell us what<br /><em>you have in mind.</em></h2>
-          <p>Share a little about what you need. We will take it one step at a time, and you can go back to make changes before finishing.</p>
-          <p className="contact-placeholder">Official contact details will be added once Aura's business email, telephone and service locations are confirmed.</p>
-        </div>
-        <ContactFlow />
-      </section>
-    </main>
-  );
-}
-
 function ContactFlow() {
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
