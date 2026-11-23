@@ -70,3 +70,45 @@ test("section reveals are present and remain visible with reduced motion", async
   await expect(page.locator("#main-content > section.section-reveal")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Made for the moments in between." })).toBeVisible();
 });
+
+
+test("Spa experience card spans the full Explore Aura row", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  const positions = await page.evaluate(() => {
+    const grid = document.querySelector(".division-section .division-grid");
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(".division-section .division-card"));
+    if (!grid || cards.length !== 3) throw new Error("Explore Aura cards are missing.");
+    const gridBox = grid.getBoundingClientRect();
+    const boxes = cards.map((card) => {
+      const box = card.getBoundingClientRect();
+      return { left: box.left, right: box.right, top: box.top, width: box.width };
+    });
+    return { grid: { left: gridBox.left, right: gridBox.right, width: gridBox.width }, boxes };
+  });
+  expect(Math.abs(positions.boxes[0].top - positions.boxes[1].top)).toBeLessThan(2);
+  expect(positions.boxes[2].top).toBeGreaterThan(positions.boxes[0].top);
+  expect(Math.abs(positions.boxes[2].left - positions.grid.left)).toBeLessThan(2);
+  expect(Math.abs(positions.boxes[2].width - positions.grid.width)).toBeLessThan(2);
+});
+
+test("Clothing page opens with two full-width editorial sections", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/clothing");
+  const layout = await page.evaluate(() => {
+    const hero = document.querySelector<HTMLElement>(".clothing-page > .page-hero");
+    const lookbook = document.querySelector<HTMLElement>(".clothing-page .clothing-lookbook");
+    if (!hero || !lookbook) throw new Error("Clothing editorial sections are missing.");
+    return {
+      heroWidth: hero.getBoundingClientRect().width,
+      lookbookWidth: lookbook.getBoundingClientRect().width,
+      viewportWidth: window.innerWidth,
+    };
+  });
+  expect(layout.heroWidth).toBe(layout.viewportWidth);
+  expect(layout.lookbookWidth).toBe(layout.viewportWidth);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const mobileWidth = await page.locator(".clothing-page .clothing-lookbook").evaluate((node) => node.getBoundingClientRect().width);
+  expect(mobileWidth).toBe(390);
+});

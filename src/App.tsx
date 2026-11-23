@@ -87,6 +87,7 @@ type Product = {
   image: string;
   description: string;
   note: string;
+  demoPrice: string;
 };
 
 const ASSETS = {
@@ -123,6 +124,10 @@ const products: Product[] = [
     image: ASSETS.dress,
     description: "An editorial preview of the Aura clothing collection.",
     note: "Editorial preview · final product photography to be confirmed",
+    demoPrice: "R 1,450",
+    demoPrice: "R 790",
+    demoPrice: "R 990",
+    demoPrice: "R 1,250",
   },
   {
     slug: "look-02",
@@ -608,7 +613,7 @@ function HomePage() {
                   <img src={product.image} alt={`Product preview for ${product.name}`} sizes="(max-width: 680px) 44vw, (max-width: 1000px) 45vw, 23vw" loading="lazy" decoding="async" />
                 </Link>
                 <div className="shop-feature-card-meta">
-                  <div><h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3><p>Collection preview</p></div>
+                  <div><h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3><p className="product-demo-price"><span>Demo price</span><strong>{product.demoPrice}</strong></p></div>
                 </div>
                 <div className="shop-feature-actions">
                   {wasAdded ? (
@@ -626,7 +631,7 @@ function HomePage() {
             );
           })}
         </div>
-        <p className="shop-feature-note">Product images are from the existing preview catalogue. Final prices and options will be confirmed before orders open.</p>
+        <p className="shop-feature-note">Demo prices are illustrative placeholders for design review only. Final retail prices and product options will be confirmed before orders open.</p>
       </section>
 
       <section className="story-split">
@@ -733,7 +738,7 @@ function ClothingPage() {
                 <div className="product-card-meta">
                   <div>
                     <h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3>
-                    <p>View product details</p>
+                    <p className="product-demo-price"><span>Demo price</span><strong>{product.demoPrice}</strong></p>
                   </div>
                 </div>
                 <div className="product-card-actions">
@@ -757,7 +762,7 @@ function ClothingPage() {
             );
           })}
         </div>
-        <p className="catalogue-note">The images shown are editorial previews. Final product photography, descriptions, sizes, stock and prices will be confirmed before orders open.</p>
+        <p className="catalogue-note">The images shown are editorial previews. Demo prices are placeholders for design review only. Final product photography, descriptions, sizes, stock and retail prices will be confirmed before orders open.</p>
       </section>
     </main>
   );
@@ -768,7 +773,7 @@ function ProductPage() {
   const navigate = useNavigate();
   const { addItem } = useCart();
   if (!product) return <NotFoundPage />;
-  return <main id="main-content" tabIndex={-1}><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span><Link to="/clothing">Clothing</Link><span>/</span><span>{product.name}</span></div><section className="product-detail"><div className="product-detail-image"><img src={product.image} alt={product.note} /></div><div className="product-detail-copy"><h1>{product.name}</h1><p className="product-description">{product.description}</p><div className="product-detail-rule" /><p className="product-price-pending">Price and product options will be displayed here.</p><p className="catalogue-note">This is a storefront preview. Final product details, size options, stock and prices are being prepared. Orders will open once the catalogue and secure checkout are connected.</p><button className="button button-dark" onClick={() => { addItem(product.slug); navigate("/cart"); }}>Add to bag</button></div></section></main>;
+  return <main id="main-content" tabIndex={-1}><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span><Link to="/clothing">Clothing</Link><span>/</span><span>{product.name}</span></div><section className="product-detail"><div className="product-detail-image"><img src={product.image} alt={product.note} /></div><div className="product-detail-copy"><h1>{product.name}</h1><p className="product-description">{product.description}</p><div className="product-detail-rule" /><p className="product-price-pending product-demo-price"><span>Demo price</span><strong>{product.demoPrice}</strong></p><p className="catalogue-note">This is a storefront preview. The price shown is a demo value for design review only. Final product details, size options, stock and retail prices are being prepared. Orders will open once the catalogue and secure checkout are connected.</p><button className="button button-dark" onClick={() => { addItem(product.slug); navigate("/cart"); }}>Add to bag</button></div></section></main>;
 }
 
 function SpaPage() {
@@ -1178,7 +1183,7 @@ function CartPage() {
                 <output className="cart-quantity-value" aria-live="polite">{line.quantity}</output>
                 <button type="button" aria-label={`Increase quantity of ${line.product!.name}`} onClick={() => updateQuantity(line.slug, line.quantity + 1)}>+</button>
               </div>
-              <p className="product-price-pending">Price to be confirmed</p>
+              <p className="product-price-pending product-demo-price"><span>Demo price</span><strong>{line.product!.demoPrice}</strong></p>
               <button className="text-link cart-remove" type="button" aria-label={`Remove ${line.product!.name} from bag`} onClick={() => removeItem(line.slug)}>Remove</button>
             </div>
           </article>
@@ -1187,7 +1192,7 @@ function CartPage() {
       <div className="cart-summary">
         <div>
           <strong>{itemCount} {itemCount === 1 ? "item" : "items"} in your bag</strong>
-          <p>Final prices, delivery and taxes will be shown before payment.</p>
+          <p>Demo prices are placeholders only. Final prices, delivery and taxes will be shown before payment.</p>
         </div>
         <Link className="button button-dark" to="/checkout">Continue to checkout</Link>
       </div>

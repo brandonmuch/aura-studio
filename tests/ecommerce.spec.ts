@@ -220,3 +220,59 @@ test("blog is removed from the storefront navigation and legacy URLs", async ({ 
   await page.goto("/journal");
   await expect(page).toHaveURL("/");
 });
+
+
+test("demo prices are visible on homepage and clothing product cards", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  await expect(page.locator(".shop-feature-card .product-demo-price")).toHaveCount(4);
+  await expect(page.locator(".shop-feature-card .product-demo-price").first()).toContainText("Demo price");
+  await expect(page.locator(".shop-feature-card .product-demo-price").first()).toContainText("R 1,250");
+
+  await page.goto("/clothing");
+  await expect(page.locator(".product-card .product-demo-price")).toHaveCount(4);
+  await expect(page.locator(".product-card .product-demo-price").nth(3)).toContainText("R 1,450");
+  const italicStyles = await page.locator("em, i").evaluateAll((nodes) =>
+    nodes.map((node) => getComputedStyle(node).fontStyle)
+  );
+  expect(italicStyles.every((style) => style === "normal")).toBe(true);
+});
+
+test("homepage product photography has no border or inset image padding", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  const styles = await page.locator(".shop-feature-image").first().evaluate((node) => {
+    const image = node.querySelector("img");
+    if (!image) throw new Error("Product image is missing.");
+    const link = getComputedStyle(node);
+    const imageStyle = getComputedStyle(image);
+    return {
+      border: link.borderTopWidth,
+      outline: link.outlineStyle,
+      boxShadow: link.boxShadow,
+      padding: imageStyle.padding,
+    };
+  });
+  expect(styles.border).toBe("0px");
+  expect(styles.outline).toBe("none");
+  expect(styles.boxShadow).toBe("none");
+  expect(styles.padding).toBe("0px");
+});
+
+
+test("Transfers hero supporting copy remains readable over the image", async ({ page }) => {
+  await page.goto("/transfers");
+  const intro = page.locator(".page-hero--image .page-hero-copy > p");
+  await expect(intro).toBeVisible();
+  await expect(intro).toContainText("Private airport transfers for selected journeys in Cape Town");
+  const style = await intro.evaluate((node) => ({
+    color: getComputedStyle(node).color,
+    opacity: getComputedStyle(node).opacity,
+    fontSize: parseFloat(getComputedStyle(node).fontSize),
+    textShadow: getComputedStyle(node).textShadow,
+  }));
+  expect(style.color).toBe("rgb(255, 255, 255)");
+  expect(style.opacity).toBe("1");
+  expect(style.fontSize).toBeGreaterThanOrEqual(15);
+  expect(style.textShadow).not.toBe("none");
+});

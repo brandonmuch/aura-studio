@@ -2958,3 +2958,165 @@ p { line-height: var(--leading-body); }
     transition: none;
   }
 }
+
+
+/* Explore Aura: Clothing and Transfers sit together, Spa spans the full row. */
+.division-section .division-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+.division-section .division-grid > .division-card--spa {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  justify-self: stretch !important;
+  min-height: clamp(360px, 34vw, 500px) !important;
+  aspect-ratio: 2.35 / 1 !important;
+}
+.division-section .division-grid > .division-card--spa img {
+  object-position: center 46%;
+}
+@media (max-width: 680px) {
+  .division-section .division-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .division-section .division-grid > .division-card--spa {
+    grid-column: auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    aspect-ratio: 1.05 / 1 !important;
+  }
+}
+
+/* Two full-bleed editorial moments on the Clothing page. */
+.clothing-page > .page-hero--full {
+  width: 100%;
+  min-height: clamp(620px, 70vw, 880px);
+}
+.clothing-page .clothing-lookbook {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, .82fr) minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+}
+.clothing-page .clothing-lookbook-image--portrait,
+.clothing-page .clothing-lookbook-image--landscape {
+  min-height: clamp(520px, 57vw, 780px);
+  aspect-ratio: auto;
+}
+.clothing-page .clothing-lookbook-image img {
+  min-height: inherit;
+  object-position: center;
+}
+.clothing-page .clothing-lookbook-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(34px, 4.5vw, 72px);
+  background: #f2f0e9;
+}
+.clothing-page .clothing-lookbook-copy h2 {
+  max-width: 10ch;
+}
+@media (max-width: 900px) {
+  .clothing-page .clothing-lookbook {
+    grid-template-columns: 1fr 1fr;
+  }
+  .clothing-page .clothing-lookbook-copy {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+    min-height: 300px;
+  }
+  .clothing-page .clothing-lookbook-image--portrait,
+  .clothing-page .clothing-lookbook-image--landscape {
+    min-height: clamp(420px, 64vw, 620px);
+  }
+}
+@media (max-width: 680px) {
+  .clothing-page > .page-hero--full {
+    min-height: 620px;
+  }
+  .clothing-page .clothing-lookbook {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .clothing-page .clothing-lookbook-copy {
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 0;
+    padding: 64px 8%;
+  }
+  .clothing-page .clothing-lookbook-image--portrait,
+  .clothing-page .clothing-lookbook-image--landscape {
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+  .clothing-page .clothing-lookbook-image img {
+    min-height: 0;
+  }
+}
+
+/* Make the Transfers hero copy readable against every part of its photograph. */
+#main-content > .page-hero--image:not(.clothing-page .page-hero--image) .page-hero-overlay {
+  background:
+    linear-gradient(90deg, rgba(12, 14, 12, .48), rgba(12, 14, 12, .32)),
+    linear-gradient(0deg, rgba(12, 14, 12, .42), rgba(12, 14, 12, .22));
+}
+#main-content > .page-hero--image .page-hero-copy h1,
+#main-content > .page-hero--image .page-hero-copy p {
+  color: #fff !important;
+  opacity: 1 !important;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .48);
+}
+#main-content > .page-hero--image .page-hero-copy p {
+  max-width: 760px;
+  font-size: clamp(15px, 1.35vw, 18px);
+  line-height: 1.7;
+}
+
+/* Keep all emphasis upright sitewide, including inherited and utility styles. */
+html body em,
+html body i {
+  font-style: normal !important;
+}
+
+/* Borderless home product imagery and quiet, clearly-labelled demo prices. */
+.shop-feature .shop-feature-image {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+.shop-feature .shop-feature-image img {
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.product-demo-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 7px;
+  margin: 7px 0 0 !important;
+  color: #55574f !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+.product-demo-price span {
+  color: #858276;
+  font-size: 9px;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+.product-demo-price strong {
+  color: #20211d;
+  font-size: 13px;
+  font-weight: 500;
+}
+.shop-feature-card-meta .product-demo-price,
+.clothing-page .product-card-meta .product-demo-price {
+  margin-top: 7px !important;
+}
