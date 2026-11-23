@@ -162,7 +162,7 @@ test("homepage clothing cards keep consistent framing and responsive alignment",
         };
       });
       return {
-        columns: getComputedStyle(grid).gridTemplateColumns.trim().split(/\\s+/).length,
+        columns: getComputedStyle(grid).gridTemplateColumns.trim().split(" ").filter(Boolean).length,
         gridLeft: gridBox.left,
         gridWidth: gridBox.width,
         cards: cardBoxes,
