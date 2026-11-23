@@ -192,3 +192,19 @@ test("homepage clothing cards keep consistent framing and responsive alignment",
   await inspectLayout(820, 2);
   await inspectLayout(390, 2);
 });
+test("main navigation exposes its state and controlled menu on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const menuButton = page.getByRole("button", { name: "Open menu" });
+  const navigation = page.getByRole("navigation", { name: "Main navigation" });
+
+  await expect(menuButton).toHaveAttribute("aria-controls", "primary-navigation");
+  await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+  await menuButton.click();
+  await expect(page.getByRole("button", { name: "Close menu" })).toHaveAttribute("aria-expanded", "true");
+  await expect(navigation.getByRole("link", { name: "Home" })).toBeVisible();
+  await navigation.getByRole("link", { name: "Clothing" }).click();
+  await expect(page).toHaveURL(/\\/clothing$/);
+  await expect(page.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
+});

@@ -291,10 +291,10 @@ function Header() {
         <Link className="brand" to="/" aria-label="Aura Studio home">
           <span className="brand-main">AURA</span><span className="brand-sub">STUDIO</span>
         </Link>
-        <button className="mobile-menu-button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
+        <button className="mobile-menu-button" type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-controls="primary-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
           <span /><span />
         </button>
-        <nav className={menuOpen ? "primary-nav is-open" : "primary-nav"} aria-label="Main navigation">
+        <nav id="primary-navigation" className={menuOpen ? "primary-nav is-open" : "primary-nav"} aria-label="Main navigation">
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/transfers">Transfers</NavLink>
           <NavLink to="/clothing">Clothing</NavLink>
@@ -303,7 +303,7 @@ function Header() {
           <NavLink to="/blog">Blog</NavLink>
           <NavLink to="/contact">Contact</NavLink>
           <div className="nav-actions">
-            <button className="icon-button" aria-label="Search" onClick={() => setSearchOpen(true)}>⌕</button>
+            <button className="icon-button" type="button" aria-label="Search" onClick={() => setSearchOpen(true)}>⌕</button>
             <NavLink className="bag-link" to="/cart" aria-label="Shopping bag">Bag <span>{bagCount}</span></NavLink>
           </div>
         </nav>
@@ -311,7 +311,7 @@ function Header() {
       {searchOpen && (
         <div className="search-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSearchOpen(false); }}>
           <section ref={searchPanelRef} className="search-panel" role="dialog" aria-modal="true" aria-label="Search Aura Studio">
-            <div className="search-panel-head"><button className="icon-button" onClick={() => setSearchOpen(false)} aria-label="Close search">×</button></div>
+            <div className="search-panel-head"><button className="icon-button" type="button" onClick={() => setSearchOpen(false)} aria-label="Close search">×</button></div>
             <input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="What are you looking for?" aria-label="Search query" />
             <div className="search-results">
               {results.map((result) => <Link key={result.to} to={result.to}>{result.label}</Link>)}
@@ -338,7 +338,7 @@ function Footer({ onCookieSettings }: { onCookieSettings: () => void }) {
       </div>
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} Aura Studio. All rights reserved.</span>
-        <div className="footer-legal"><Link to="/policies/terms">Terms</Link><Link to="/policies/privacy">Privacy</Link><Link to="/policies/cookies">Cookies</Link><Link to="/policies/accessibility">Accessibility</Link><button onClick={onCookieSettings}>Cookie settings</button></div>
+        <div className="footer-legal"><Link to="/policies/terms">Terms</Link><Link to="/policies/privacy">Privacy</Link><Link to="/policies/cookies">Cookies</Link><Link to="/policies/accessibility">Accessibility</Link><button type="button" onClick={onCookieSettings}>Cookie settings</button></div>
         <span>South Africa</span>
       </div>
     </footer>
