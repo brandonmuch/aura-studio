@@ -1837,3 +1837,244 @@ p { line-height: var(--leading-body); }
   .enquiry-section { grid-template-columns: 1fr; gap: 32px; }
   .enquiry-flow { max-width: none; }
 }
+
+
+/* Homepage audit: aligned section containers and stable editorial product cards. */
+.division-section .section-head,
+.blog-teaser > .section-head {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto clamp(28px, 3vw, 40px);
+}
+
+.division-section .section-head {
+  align-items: flex-end;
+}
+
+.division-section .section-head > p {
+  max-width: 28ch;
+  line-height: 1.4;
+}
+
+.division-grid {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 1.8vw, 22px);
+}
+
+.division-card {
+  min-width: 0;
+  min-height: clamp(350px, 35vw, 450px);
+}
+
+.shop-feature {
+  padding-block: clamp(64px, 7vw, 96px);
+}
+
+.shop-feature-head,
+.shop-feature-grid,
+.shop-feature-note {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.shop-feature-head {
+  margin-bottom: clamp(26px, 3vw, 40px);
+}
+
+.shop-feature-head > div {
+  min-width: 0;
+}
+
+.shop-feature-head > .text-link {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.shop-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(18px, 2.2vw, 30px);
+}
+
+.shop-feature-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+.shop-feature-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: .82 / 1;
+  overflow: hidden;
+  background: #f2f0e9;
+}
+
+.shop-feature-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: clamp(8px, 1vw, 14px);
+  object-fit: contain;
+  object-position: center;
+  transition: transform 500ms ease;
+}
+
+.shop-feature-card-meta {
+  display: block;
+  min-height: 78px;
+  padding: 18px 0 0;
+}
+
+.shop-feature-card-meta h3 {
+  margin: 0 0 6px;
+  font-size: clamp(21px, 2vw, 27px);
+  line-height: 1.18;
+}
+
+.shop-feature-card-meta p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.shop-feature-actions {
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.shop-feature-add {
+  width: 100%;
+  min-height: 48px;
+}
+
+.shop-feature-actions .quick-add-confirmation {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.shop-feature-note {
+  margin-top: 24px;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .division-grid,
+  .shop-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .division-card:last-child,
+  .shop-feature-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    width: calc(50% - 8px);
+    justify-self: center;
+  }
+
+  .division-card:last-child {
+    min-height: clamp(340px, 42vw, 420px);
+    aspect-ratio: auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .division-section .section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .division-section .section-head > p {
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .division-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .division-card,
+  .division-card:last-child {
+    grid-column: auto;
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 1.05 / 1;
+  }
+
+  .shop-feature-head {
+    display: block;
+    margin-bottom: 26px;
+  }
+
+  .shop-feature-head h2 {
+    font-size: clamp(42px, 10vw, 58px);
+    line-height: 1;
+  }
+
+  .shop-feature-head p {
+    max-width: 36ch;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .shop-feature-head > .text-link {
+    display: inline-flex;
+    margin-top: 16px;
+  }
+
+  .shop-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 14px;
+  }
+
+  .shop-feature-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    width: calc(50% - 7px);
+    justify-self: center;
+  }
+
+  .shop-feature-image {
+    aspect-ratio: .82 / 1;
+  }
+
+  .shop-feature-card-meta {
+    min-height: 72px;
+    padding-top: 14px;
+  }
+
+  .shop-feature-card-meta h3 {
+    font-size: 20px;
+  }
+
+  .shop-feature-card-meta p {
+    font-size: 11px;
+  }
+
+  .shop-feature-add {
+    min-height: 46px;
+    font-size: 12px;
+  }
+
+  .shop-feature-actions .quick-add-confirmation {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .shop-feature-note {
+    font-size: 11px;
+  }
+}

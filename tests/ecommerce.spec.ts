@@ -136,3 +136,61 @@ test("transfer enquiry follows a guided flow and shows policy acknowledgement be
   await page.getByRole("button", { name: "Start again" }).click();
   await expect(page.getByLabel("What should we call you?")).toBeVisible();
 });
+
+
+test("homepage clothing cards keep consistent framing and responsive alignment", async ({ page }) => {
+  await page.goto("/");
+  const inspectLayout = async (width: number, expectedColumns: number) => {
+    await page.setViewportSize({ width, height: 900 });
+    const layout = await page.evaluate(() => {
+      const grid = document.querySelector<HTMLElement>(".shop-feature-grid");
+      const cards = Array.from(document.querySelectorAll<HTMLElement>(".shop-feature-card"));
+      const images = Array.from(document.querySelectorAll<HTMLImageElement>(".shop-feature-image img"));
+      const buttons = Array.from(document.querySelectorAll<HTMLElement>(".shop-feature-add"));
+      if (!grid || cards.length !== 3 || images.length !== 3 || buttons.length !== 3) {
+        throw new Error("The homepage clothing grid is missing expected card elements.");
+      }
+      const gridBox = grid.getBoundingClientRect();
+      const cardBoxes = cards.map((card) => {
+        const box = card.getBoundingClientRect();
+        const action = card.querySelector<HTMLElement>(".shop-feature-actions");
+        const actionBox = action?.getBoundingClientRect();
+        return {
+          left: box.left,
+          width: box.width,
+          actionTop: actionBox?.top ?? 0,
+        };
+      });
+      return {
+        columns: getComputedStyle(grid).gridTemplateColumns.trim().split(/\\s+/).length,
+        gridLeft: gridBox.left,
+        gridWidth: gridBox.width,
+        cards: cardBoxes,
+        imageFits: images.map((image) => getComputedStyle(image).objectFit),
+        buttonHeights: buttons.map((button) => button.getBoundingClientRect().height),
+        documentWidth: document.documentElement.scrollWidth,
+        viewportWidth: window.innerWidth,
+      };
+    });
+
+    expect(layout.columns).toBe(expectedColumns);
+    expect(layout.imageFits.every((fit) => fit === "contain")).toBe(true);
+    expect(layout.buttonHeights.every((height) => height >= 44)).toBe(true);
+    expect(layout.documentWidth - layout.viewportWidth).toBeLessThanOrEqual(1);
+    expect(layout.cards[0].width).toBeCloseTo(layout.cards[1].width, 0);
+
+    if (expectedColumns === 3) {
+      expect(layout.cards[0].actionTop).toBeCloseTo(layout.cards[1].actionTop, 0);
+      expect(layout.cards[1].actionTop).toBeCloseTo(layout.cards[2].actionTop, 0);
+    } else {
+      const lastCardCentre = layout.cards[2].left + layout.cards[2].width / 2;
+      const gridCentre = layout.gridLeft + layout.gridWidth / 2;
+      expect(lastCardCentre).toBeCloseTo(gridCentre, 0);
+      expect(layout.cards[2].width).toBeCloseTo(layout.cards[0].width, 0);
+    }
+  };
+
+  await inspectLayout(1440, 3);
+  await inspectLayout(820, 2);
+  await inspectLayout(390, 2);
+});
