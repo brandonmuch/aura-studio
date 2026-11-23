@@ -399,6 +399,10 @@ function AppShell() {
 }
 
 function HomePage() {
+  const [addedSlug, setAddedSlug] = useState<string | null>(null);
+  const { addItem, items } = useCart();
+  const bagCount = items.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <main>
       <section className="home-hero">
@@ -435,18 +439,32 @@ function HomePage() {
           <Link className="text-link" to="/clothing">Explore all clothing</Link>
         </div>
         <div className="shop-feature-grid">
-          {products.map((product, index) => (
-            <Link className="shop-feature-card" to={`/product/${product.slug}`} key={product.slug}>
-              <div className="shop-feature-image">
-                <img src={product.image} alt={product.note} loading="lazy" />
-                <span className="shop-feature-number">0{index + 1}</span>
-              </div>
-              <div className="shop-feature-card-meta">
-                <div><h3>{product.name}</h3><p>Collection preview</p></div>
-                <span aria-hidden="true">↗</span>
-              </div>
-            </Link>
-          ))}
+          {products.map((product, index) => {
+            const wasAdded = addedSlug === product.slug;
+            return (
+              <article className="shop-feature-card" key={product.slug}>
+                <Link className="shop-feature-image" to={`/product/${product.slug}`} aria-label={`View ${product.name}`}>
+                  <img src={product.image} alt={product.note} loading="lazy" />
+                  <span className="shop-feature-number">0{index + 1}</span>
+                </Link>
+                <div className="shop-feature-card-meta">
+                  <div><h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3><p>Collection preview</p></div>
+                </div>
+                <div className="shop-feature-actions">
+                  {wasAdded ? (
+                    <div className="quick-add-confirmation" role="status">
+                      <span>Added to bag</span>
+                      <Link to="/cart">View bag ({bagCount})</Link>
+                    </div>
+                  ) : (
+                    <button className="button button-dark shop-feature-add" type="button" onClick={() => { addItem(product.slug); setAddedSlug(product.slug); }}>
+                      Add to bag
+                    </button>
+                  )}
+                </div>
+              </article>
+            );
+          })}
         </div>
         <p className="shop-feature-note">Preview imagery only. Product photography, prices and options will be confirmed before orders open.</p>
       </section>
