@@ -13,7 +13,7 @@ import {
 import BlurText from "./components/BlurText";
 
 type CartLine = { slug: string; quantity: number };
-type CartContextValue = { items: CartLine[]; addItem: (slug: string) => void; removeItem: (slug: string) => void };
+type CartContextValue = { items: CartLine[]; addItem: (slug: string) => void; updateQuantity: (slug: string, quantity: number) => void; removeItem: (slug: string) => void };
 const CartContext = createContext<CartContextValue | null>(null);
 const ANNOUNCEMENT = ""; // Add a current promotion or store update here. Leave blank to hide the bar.
 
@@ -23,20 +23,45 @@ function useCart() {
   return value;
 }
 
+function isCartLine(value: unknown): value is CartLine {
+  if (typeof value !== "object" || value === null) return false;
+  const candidate = value as Record<string, unknown>;
+  return typeof candidate.slug === "string"
+    && Number.isSafeInteger(candidate.quantity)
+    && Number(candidate.quantity) > 0;
+}
+
 function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartLine[]>(() => {
     if (typeof window === "undefined") return [];
-    try { return JSON.parse(window.localStorage.getItem("aura-cart") || "[]") as CartLine[]; }
-    catch { return []; }
+    try {
+      const stored: unknown = JSON.parse(window.localStorage.getItem("aura-cart") || "[]");
+      return Array.isArray(stored) ? stored.filter(isCartLine) : [];
+    } catch {
+      return [];
+    }
   });
-  useEffect(() => { window.localStorage.setItem("aura-cart", JSON.stringify(items)); }, [items]);
+
+  useEffect(() => {
+    window.localStorage.setItem("aura-cart", JSON.stringify(items));
+  }, [items]);
+
   const addItem = (slug: string) => setItems((current) => current.some((item) => item.slug === slug)
     ? current.map((item) => item.slug === slug ? { ...item, quantity: item.quantity + 1 } : item)
     : [...current, { slug, quantity: 1 }]);
-  const removeItem = (slug: string) => setItems((current) => current.filter((item) => item.slug !== slug));
-  return <CartContext.Provider value={{ items, addItem, removeItem }}>{children}</CartContext.Provider>;
-}
 
+  const updateQuantity = (slug: string, quantity: number) => {
+    if (!Number.isFinite(quantity)) return;
+    const nextQuantity = Math.floor(quantity);
+    setItems((current) => nextQuantity <= 0
+      ? current.filter((item) => item.slug !== slug)
+      : current.map((item) => item.slug === slug ? { ...item, quantity: nextQuantity } : item));
+  };
+
+  const removeItem = (slug: string) => setItems((current) => current.filter((item) => item.slug !== slug));
+
+  return <CartContext.Provider value={{ items, addItem, updateQuantity, removeItem }}>{children}</CartContext.Provider>;
+}
 type Product = {
   slug: string;
   name: string;
@@ -400,6 +425,32 @@ function HomePage() {
         </div>
       </section>
 
+      <section className="shop-feature section-pad" aria-labelledby="shop-feature-title">
+        <div className="shop-feature-head">
+          <div>
+            <span className="eyebrow">Aura Clothing</span>
+            <h2 id="shop-feature-title">The clothing edit.</h2>
+            <p>A first look at the pieces and silhouettes shaping the Aura wardrobe.</p>
+          </div>
+          <Link className="text-link" to="/clothing">Explore all clothing <span>↗</span></Link>
+        </div>
+        <div className="shop-feature-grid">
+          {products.map((product, index) => (
+            <Link className="shop-feature-card" to={`/product/${product.slug}`} key={product.slug}>
+              <div className="shop-feature-image">
+                <img src={product.image} alt={product.note} loading="lazy" />
+                <span className="shop-feature-number">0{index + 1}</span>
+              </div>
+              <div className="shop-feature-card-meta">
+                <div><h3>{product.name}</h3><p>Collection preview</p></div>
+                <span aria-hidden="true">↗</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <p className="shop-feature-note">Preview imagery only. Product photography, prices and options will be confirmed before orders open.</p>
+      </section>
+
       <section className="story-split">
         <div className="story-image"><img src={ASSETS.mobileHero} alt="Editorial image from the website design template" loading="lazy" /></div>
         <div className="story-copy"><span className="eyebrow">The Aura standard</span><h2>An elevated experience,<br /><em>in every detail.</em></h2><p>True luxury is not about excess. It is the feeling of being looked after, with care that is considered, consistent and quietly confident.</p><Link className="text-link" to="/about">Our story <span>↗</span></Link></div>
@@ -523,10 +574,46 @@ function TrustCard({ title, copy, items }: { title: string; copy: string; items:
 }
 
 function CartPage() {
-  const { items, removeItem } = useCart();
-  const cartProducts = items.map((line) => ({ ...line, product: products.find((product) => product.slug === line.slug) })).filter((line) => line.product);
-  if (cartProducts.length === 0) return <main className="empty-state section-pad"><span className="eyebrow">Your bag</span><h1>Your bag is empty.</h1><p>Explore the clothing collection and add pieces to your bag.</p><Link className="button button-dark" to="/clothing">Shop clothing <span>↗</span></Link></main>;
-  return <main className="cart-page section-pad"><div className="cart-heading"><span className="eyebrow">Your bag</span><h1>Shopping bag</h1></div><div className="cart-lines">{cartProducts.map((line) => <article className="cart-line" key={line.slug}><img src={line.product!.image} alt={line.product!.name} /><div><h2>{line.product!.name}</h2><p>Quantity: {line.quantity}</p><p className="product-price-pending">Price to be confirmed</p><button className="text-link" onClick={() => removeItem(line.slug)}>Remove</button></div></article>)}</div><div className="cart-summary"><p>Final prices, delivery and taxes will be shown before payment.</p><Link className="button button-dark" to="/checkout">Continue to checkout <span>↗</span></Link></div></main>;
+  const { items, updateQuantity, removeItem } = useCart();
+  const cartProducts = items
+    .map((line) => ({ ...line, product: products.find((product) => product.slug === line.slug) }))
+    .filter((line) => line.product);
+  const itemCount = cartProducts.reduce((total, line) => total + line.quantity, 0);
+
+  if (cartProducts.length === 0) {
+    return <main className="empty-state section-pad"><span className="eyebrow">Your bag</span><h1>Your bag is empty.</h1><p>Explore the clothing collection and add pieces to your bag.</p><Link className="button button-dark" to="/clothing">Shop clothing <span>↗</span></Link></main>;
+  }
+
+  return (
+    <main className="cart-page section-pad">
+      <div className="cart-heading"><span className="eyebrow">Your bag</span><h1>Shopping bag</h1></div>
+      <div className="cart-lines">
+        {cartProducts.map((line) => (
+          <article className="cart-line" key={line.slug}>
+            <img src={line.product!.image} alt={line.product!.name} />
+            <div className="cart-line-copy">
+              <h2>{line.product!.name}</h2>
+              <p className="cart-line-label">Quantity</p>
+              <div className="cart-quantity" role="group" aria-label={`${line.product!.name} quantity`}>
+                <button type="button" aria-label={`Decrease quantity of ${line.product!.name}`} onClick={() => updateQuantity(line.slug, line.quantity - 1)}>−</button>
+                <output className="cart-quantity-value" aria-live="polite">{line.quantity}</output>
+                <button type="button" aria-label={`Increase quantity of ${line.product!.name}`} onClick={() => updateQuantity(line.slug, line.quantity + 1)}>+</button>
+              </div>
+              <p className="product-price-pending">Price to be confirmed</p>
+              <button className="text-link cart-remove" type="button" aria-label={`Remove ${line.product!.name} from bag`} onClick={() => removeItem(line.slug)}>Remove</button>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="cart-summary">
+        <div>
+          <strong>{itemCount} {itemCount === 1 ? "item" : "items"} in your bag</strong>
+          <p>Final prices, delivery and taxes will be shown before payment.</p>
+        </div>
+        <Link className="button button-dark" to="/checkout">Continue to checkout <span>↗</span></Link>
+      </div>
+    </main>
+  );
 }
 
 function CheckoutPage() {
