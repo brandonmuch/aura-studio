@@ -12,7 +12,6 @@ import {
   useParams,
 } from "react-router-dom";
 import BlurText from "./components/BlurText";
-import auraLogo from "./assets/aura-logo.svg";
 import SpotlightCard from "./components/SpotlightCard";
 import homeHeroImage from "./assets/images/clothing/aura_clothing_abstract_motion_editorial_photograph_aura_clothing_abstr.png";
 import clothingLookThreeImage from "./assets/images/clothing/aura_clothing_material_detail_editorial_photograph_aura_clothing_mater.png";
@@ -288,7 +287,7 @@ function Header() {
       {ANNOUNCEMENT.trim() && <div className="announcement-bar" role="status">{ANNOUNCEMENT}</div>}
       <header className="site-header">
         <Link className="brand" to="/" aria-label="Aura Clothing and Spa home">
-          <img className="brand-logo" src={auraLogo} alt="Aura Clothing & Spa" />
+          <span className="brand-main">AURA</span><span className="brand-sub">CLOTHING &amp; SPA</span>
         </Link>
         <button className="mobile-menu-button" type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-controls="primary-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
           <span /><span />
@@ -327,7 +326,7 @@ function Footer({ onCookieSettings }: { onCookieSettings: () => void }) {
     <footer className="site-footer">
       <div className="footer-top">
         <div className="footer-brand">
-          <Link className="brand brand-light" to="/" aria-label="Aura Clothing and Spa home"><img className="brand-logo" src={auraLogo} alt="Aura Clothing & Spa" /></Link>
+          <Link className="brand brand-light" to="/" aria-label="Aura Clothing and Spa home"><span className="brand-main">AURA</span><span className="brand-sub">CLOTHING &amp; SPA</span></Link>
           <p>Luxury, without announcement.</p>
         </div>
         <div className="footer-column"><span className="footer-label">Explore</span><Link to="/transfers">Transfers</Link><Link to="/clothing">Clothing</Link><Link to="/spa">Spa</Link><Link to="/about">Our story</Link></div>
