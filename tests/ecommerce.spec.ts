@@ -208,3 +208,15 @@ test("main navigation exposes its state and controlled menu on mobile", async ({
   await expect(page).toHaveURL(/clothing$/);
   await expect(page.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
 });
+
+test("blog is removed from the storefront navigation and legacy URLs", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Blog" })).toHaveCount(0);
+  await expect(page.locator(".footer-column").getByRole("link", { name: "Blog" })).toHaveCount(0);
+  await expect(page.locator(".blog-teaser")).toHaveCount(0);
+
+  await page.goto("/blog");
+  await expect(page).toHaveURL("/");
+  await page.goto("/journal");
+  await expect(page).toHaveURL("/");
+});
