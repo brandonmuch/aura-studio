@@ -124,9 +124,6 @@ const products: Product[] = [
     image: ASSETS.dress,
     description: "An editorial preview of the Aura clothing collection.",
     note: "Editorial preview · final product photography to be confirmed",
-    demoPrice: "R 1,450",
-    demoPrice: "R 790",
-    demoPrice: "R 990",
     demoPrice: "R 1,250",
   },
   {
@@ -136,6 +133,7 @@ const products: Product[] = [
     image: ASSETS.miniDress,
     description: "A second editorial preview of the Aura clothing direction.",
     note: "Editorial preview · final product photography to be confirmed",
+    demoPrice: "R 990",
   },
   {
     slug: "look-03",
@@ -144,6 +142,7 @@ const products: Product[] = [
     image: ASSETS.shirt,
     description: "A close study of fabric and finish from the Aura clothing direction.",
     note: "Editorial preview · final product photography to be confirmed",
+    demoPrice: "R 790",
   },
   {
     slug: "look-04",
@@ -152,6 +151,7 @@ const products: Product[] = [
     image: ASSETS.studio,
     description: "A further editorial preview from the Aura clothing direction.",
     note: "Editorial preview · final product photography to be confirmed",
+    demoPrice: "R 1,450",
   },
 ];
 

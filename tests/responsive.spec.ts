@@ -112,3 +112,38 @@ test("Clothing page opens with two full-width editorial sections", async ({ page
   const mobileWidth = await page.locator(".clothing-page .clothing-lookbook").evaluate((node) => node.getBoundingClientRect().width);
   expect(mobileWidth).toBe(390);
 });
+
+
+test("homepage tagline is centred beneath the headline as part of the hero group", async ({ page }) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const metrics = await page.locator(".home-hero").evaluate((hero) => {
+      const group = hero.querySelector<HTMLElement>(".home-hero-content");
+      const title = group?.querySelector<HTMLElement>(".hero-title");
+      const copy = group?.querySelector<HTMLElement>("p");
+      if (!group || !title || !copy) throw new Error("Homepage hero content is incomplete.");
+      const rect = (node: HTMLElement) => {
+        const box = node.getBoundingClientRect();
+        return { left: box.left, top: box.top, width: box.width, height: box.height };
+      };
+      return {
+        hero: rect(hero as HTMLElement),
+        group: rect(group),
+        title: rect(title),
+        copy: rect(copy),
+        textAlign: getComputedStyle(copy).textAlign,
+        groupPosition: getComputedStyle(group).position,
+      };
+    });
+    const heroCenterX = metrics.hero.left + metrics.hero.width / 2;
+    const groupCenterX = metrics.group.left + metrics.group.width / 2;
+    const heroCenterY = metrics.hero.top + metrics.hero.height / 2;
+    const groupCenterY = metrics.group.top + metrics.group.height / 2;
+    expect(Math.abs(heroCenterX - groupCenterX)).toBeLessThanOrEqual(2);
+    expect(Math.abs(heroCenterY - groupCenterY)).toBeLessThanOrEqual(2);
+    expect(metrics.textAlign).toBe("center");
+    expect(metrics.groupPosition).toBe("relative");
+    expect(metrics.copy.width).toBeLessThan(metrics.group.width);
+  }
+});

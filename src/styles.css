@@ -3120,3 +3120,67 @@ html body i {
 .clothing-page .product-card-meta .product-demo-price {
   margin-top: 7px !important;
 }
+
+
+/* Homepage hero composition: centre the headline, supporting line and action as one balanced group. */
+.home-hero {
+  display: grid !important;
+  place-items: center !important;
+}
+.home-hero-content {
+  position: relative !important;
+  inset: auto !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  display: flex !important;
+  flex: none !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: min(88%, 1040px) !important;
+  max-width: 1040px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+.home-hero-content .hero-title,
+.home-hero-content .blur-text-lines {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: auto !important;
+  text-align: center !important;
+}
+.home-hero-content > p {
+  width: min(42ch, 100%) !important;
+  max-width: 42ch !important;
+  margin: 20px auto 28px !important;
+  text-align: center !important;
+  text-wrap: balance;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+}
+.home-hero-content > .button {
+  align-self: center !important;
+  margin-inline: auto !important;
+}
+@media (max-width: 680px) {
+  .home-hero {
+    display: grid !important;
+    place-items: center !important;
+  }
+  .home-hero-content {
+    position: relative !important;
+    inset: auto !important;
+    width: 88% !important;
+    max-width: 88% !important;
+    transform: none !important;
+  }
+  .home-hero-content > p {
+    width: min(40ch, 100%) !important;
+    max-width: 40ch !important;
+    margin: 18px auto 26px !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+  }
+}
