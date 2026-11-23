@@ -96,10 +96,10 @@ const ASSETS = {
   hero: homeHeroImage,
   clothingCampaign: clothingLookThreeImage,
   clothingCampaignAlt: clothingCampaignAltImage,
-  dress: clothingLookOneImage,
-  miniDress: clothingLookTwoImage,
-  shirt: clothingCampaignImage,
-  studio: clothingLookFourImage,
+  dress: "https://e-commerce-clothing-women.vercel.app/ElbaDressOff-WhiteFreeTheLabel4.webp",
+  miniDress: "https://e-commerce-clothing-women.vercel.app/MINI-DRESS-BEACH-0098-Edit_1400x.webp",
+  shirt: "https://e-commerce-clothing-women.vercel.app/Something-Borrowed-Shirt-Black-Half_1400x.webp",
+  studio: "https://e-commerce-clothing-women.vercel.app/Somethingx.webp",
   clothingPortrait: clothingPortraitImage,
   lifestyle: transferJourneyImage,
   transferHero: transferVehicleImage,
@@ -525,21 +525,42 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="home-campaign home-campaign--clothing" aria-labelledby="home-clothing-title">
-        <img src={ASSETS.clothingCampaign} alt="" aria-hidden="true" loading="lazy" decoding="async" />
-        <div className="home-campaign-shade" />
-        <div className="home-campaign-copy home-campaign-copy--left">
-          
-          <h2 id="home-clothing-title">A wardrobe,<br />considered.</h2>
-          <p>Pieces chosen with intention. An easier relationship with getting dressed.</p>
-          <Link className="button button-cream" to="/clothing">Discover the collection</Link>
+      <section className="division-section section-pad" aria-labelledby="division-title">
+        <div className="section-head">
+          <div><h2 id="division-title">Explore Aura.</h2></div>
+          <p>Three considered experiences.<br />One point of view.</p>
+        </div>
+        <div className="division-grid">
+          <Link className="division-card division-card--clothing" to="/clothing">
+            <img src={ASSETS.clothingCampaign} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+            <div className="division-copy">
+              <h3>Clothing</h3>
+              <p>Considered pieces and silhouettes for a more intentional wardrobe.</p>
+              <span className="division-action">Explore clothing</span>
+            </div>
+          </Link>
+          <Link className="division-card division-card--transfers" to="/transfers">
+            <img src={ASSETS.transferHero} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+            <div className="division-copy">
+              <h3>Transfers</h3>
+              <p>Private airport transfers for selected journeys in Cape Town.</p>
+              <span className="division-action">Explore transfers</span>
+            </div>
+          </Link>
+          <Link className="division-card division-card--spa" to="/spa">
+            <img src={ASSETS.spaHero} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+            <div className="division-copy">
+              <h3>Spa</h3>
+              <p>Restorative experiences shaped around care and wellbeing.</p>
+              <span className="division-action">Explore Aura Spa</span>
+            </div>
+          </Link>
         </div>
       </section>
 
       <section className="shop-feature section-pad" aria-labelledby="shop-feature-title">
         <div className="shop-feature-head">
           <div>
-            
             <h2 id="shop-feature-title">The clothing edit.</h2>
             <p>A first look at the pieces and silhouettes shaping the Aura wardrobe.</p>
           </div>
@@ -551,8 +572,7 @@ function HomePage() {
             return (
               <article className="shop-feature-card" key={product.slug}>
                 <Link className="shop-feature-image" to={`/product/${product.slug}`} aria-label={`View ${product.name}`}>
-                  <img src={product.image} alt={`Editorial preview for ${product.name}`} loading="lazy" decoding="async" />
-                  
+                  <img src={product.image} alt={`Product preview for ${product.name}`} loading="lazy" decoding="async" />
                 </Link>
                 <div className="shop-feature-card-meta">
                   <div><h3><Link to={`/product/${product.slug}`}>{product.name}</Link></h3><p>Collection preview</p></div>
@@ -573,22 +593,7 @@ function HomePage() {
             );
           })}
         </div>
-        <p className="shop-feature-note">Preview imagery only. Product photography, prices and options will be confirmed before orders open.</p>
-      </section>
-
-      <section className="home-campaign home-campaign--experiences" aria-labelledby="home-experiences-title">
-        <img src={ASSETS.spaInterior} alt="" aria-hidden="true" loading="lazy" decoding="async" />
-        <div className="home-campaign-shade home-campaign-shade--deep" />
-        <div className="home-campaign-copy home-campaign-copy--centre">
-          
-          <h2 id="home-experiences-title">Arrive well.<br />Make room to reset.</h2>
-          <p>Thoughtful transfers for selected journeys, alongside restorative spa experiences.</p>
-          <div className="home-campaign-actions">
-            <Link className="button button-cream" to="/transfers">Cape Town airport transfers</Link>
-            <Link className="button button-outline-light" to="/spa">Explore Aura Spa</Link>
-          </div>
-          <span className="home-campaign-location">Selected airport transfer services are available in Cape Town, South Africa.</span>
-        </div>
+        <p className="shop-feature-note">Product images are from the existing preview catalogue. Final prices and options will be confirmed before orders open.</p>
       </section>
 
       <section className="story-split">

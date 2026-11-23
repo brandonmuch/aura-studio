@@ -82,9 +82,9 @@ test("contact page uses the guided form and requires privacy acknowledgement", a
 test("homepage has three editorial campaign moments and Cape Town transfer messaging", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".home-hero")).toBeVisible();
-  await expect(page.locator(".home-campaign")).toHaveCount(2);
-  await expect(page.getByRole("heading", { name: "A wardrobe, considered." })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Arrive well. Make room to reset." })).toBeVisible();
+  await expect(page.locator(".division-card")).toHaveCount(3);
+  await expect(page.getByRole("heading", { name: "Explore Aura." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "The clothing edit." })).toBeVisible();
   await expect(page.getByRole("link", { name: /Cape Town airport transfers/ })).toHaveAttribute("href", "/transfers");
 });
 
