@@ -17,6 +17,7 @@ export default function BlurText({ text, className = "", delay = 70 }: BlurTextP
   const inView = useInView(ref, { once: true, amount: 0.24 });
   const reduceMotion = useReducedMotion();
   const words = useMemo(() => text.split(" "), [text]);
+  const entranceDelays = [0, 45, 80, 110];
 
   return (
     <h1 ref={ref} className={className} aria-label={text}>
@@ -26,9 +27,9 @@ export default function BlurText({ text, className = "", delay = 70 }: BlurTextP
           <motion.span
             className="blur-text-word"
             key={`${word}-${index}`}
-            initial={reduceMotion ? false : { opacity: 0, y: 22, filter: "blur(10px)" }}
-            animate={reduceMotion || inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined}
-            transition={{ duration: 0.85, delay: reduceMotion ? 0 : index * (delay / 1000), ease: [0.22, 1, 0.36, 1] }}
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            animate={reduceMotion || inView ? { opacity: 1, y: 0 } : undefined}
+            transition={{ duration: 0.45, delay: reduceMotion ? 0 : (entranceDelays[index] ?? index * (delay / 1000)) / 1000, ease: [0.23, 1, 0.32, 1] }}
           >
             {word}
             {index < words.length - 1 ? "\u00a0" : ""}
