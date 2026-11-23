@@ -293,6 +293,7 @@ function Header() {
           <span /><span />
         </button>
         <nav className={menuOpen ? "primary-nav is-open" : "primary-nav"} aria-label="Main navigation">
+          <NavLink to="/" end>Home</NavLink>
           <NavLink to="/transfers">Transfers</NavLink>
           <NavLink to="/clothing">Clothing</NavLink>
           <NavLink to="/spa">Spa</NavLink>
