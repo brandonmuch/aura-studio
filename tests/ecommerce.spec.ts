@@ -51,7 +51,7 @@ test("clothing product cards expose a quick add-to-bag action", async ({ page })
 
   await expect(page.getByRole("status").filter({ hasText: "Added to bag" })).toBeVisible();
   await expect(page.getByRole("link", { name: "View bag (1)" })).toHaveAttribute("href", "/cart");
-  await expect(page.getByRole("link", { name: "Bag" })).toContainText("1");
+  await expect(page.getByRole("link", { name: "Shopping bag" })).toContainText("1");
 });
 
 test("contact page uses the guided form and requires privacy acknowledgement", async ({ page }) => {
