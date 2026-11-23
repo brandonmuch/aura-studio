@@ -1146,3 +1146,24 @@ h1 em, h2 em, h3 em, h4 em, .hero-title em,
   .brand-main { font-size: 29px; }
   .primary-nav { top: 64px; }
 }
+
+
+/* Material Symbols for the Aura standard feature icons */
+.standard-item > .material-symbols-outlined {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  font-family: "Material Symbols Outlined";
+  font-size: 27px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "liga";
+}
