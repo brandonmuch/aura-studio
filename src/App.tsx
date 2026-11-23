@@ -28,7 +28,6 @@ import transferVehicleImage from "./assets/images/transfers/aura_transfers_cape_
 import transferInteriorImage from "./assets/images/transfers/aura_transfers_interior_detail_editorial_photograph_aura_transfers_int.png";
 import transferArrivalImage from "./assets/images/transfers/editorial_cape_town_arrival_and_travel_photograph_for_aura_studio_aura.png";
 import aboutInteriorImage from "./assets/images/editorial/architectural_interior_and_material_study_for_aura_studio_aura_about.png";
-import blogFashionImage from "./assets/images/editorial/candid_art_directed_fashion_editorial_for_aura_studio_aura_journal_sty.png";
 
 type CartLine = { slug: string; quantity: number };
 type CartContextValue = { items: CartLine[]; addItem: (slug: string) => void; updateQuantity: (slug: string, quantity: number) => void; removeItem: (slug: string) => void };
@@ -112,7 +111,6 @@ const ASSETS = {
   spaEditorial: spaEditorialImage,
   mobileHero: aboutInteriorImage,
   about: aboutInteriorImage,
-  blogFashion: blogFashionImage,
 };
 
 const products: Product[] = [
@@ -300,7 +298,6 @@ function Header() {
           <NavLink to="/clothing">Clothing</NavLink>
           <NavLink to="/spa">Spa</NavLink>
           <NavLink to="/about">About</NavLink>
-          <NavLink to="/blog">Blog</NavLink>
           <NavLink to="/contact">Contact</NavLink>
           <div className="nav-actions">
             <button className="icon-button" type="button" aria-label="Search" onClick={() => setSearchOpen(true)}>⌕</button>
@@ -332,7 +329,7 @@ function Footer({ onCookieSettings }: { onCookieSettings: () => void }) {
           <Link className="brand brand-light" to="/"><span className="brand-main">AURA</span><span className="brand-sub">STUDIO</span></Link>
           <p>Luxury, without announcement.</p>
         </div>
-        <div className="footer-column"><span className="footer-label">Explore</span><Link to="/transfers">Transfers</Link><Link to="/clothing">Clothing</Link><Link to="/spa">Spa</Link><Link to="/about">Our story</Link><Link to="/blog">Blog</Link></div>
+        <div className="footer-column"><span className="footer-label">Explore</span><Link to="/transfers">Transfers</Link><Link to="/clothing">Clothing</Link><Link to="/spa">Spa</Link><Link to="/about">Our story</Link></div>
         <div className="footer-column"><span className="footer-label">Support</span><Link to="/faq">FAQs</Link><Link to="/contact">Contact</Link><Link to="/policies/shipping">Shipping</Link><Link to="/policies/returns">Returns</Link><Link to="/policies/bookings">Bookings</Link></div>
         <div className="footer-column footer-promise"><span className="footer-label">Our standard</span><p>Care in every interaction. Clarity in every commitment. Respect for your time, privacy and trust.</p><Link to="/trust">Trust & standards</Link></div>
       </div>
@@ -488,14 +485,14 @@ function AppShell() {
         <Route path="/product/:slug" element={<ProductPage />} />
         <Route path="/spa" element={<SpaPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/journal" element={<Navigate to="/blog" replace />} />
-        <Route path="/contact" element={<ContactPage />} />
+
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/trust" element={<TrustPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/policies/:policy" element={<PolicyPage />} />
+        <Route path="/blog" element={<Navigate to="/" replace />} />
+        <Route path="/journal" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer onCookieSettings={openPreferences} />
@@ -602,14 +599,6 @@ function HomePage() {
         <div className="story-copy"><h2>An elevated experience,<br /><em>in every detail.</em></h2><p>True luxury is not about excess. It is the feeling of being looked after, with care that is considered, consistent and quietly confident.</p><Link className="text-link" to="/about">Our story</Link></div>
       </section>
 
-      <section className="blog-teaser section-pad">
-        <div className="section-head"><div><h2>From the blog.</h2></div><Link className="text-link" to="/blog">Visit the blog</Link></div>
-        <div className="blog-grid">
-          <BlogCard title="The art of arriving well" image={ASSETS.transferArrival} to="/blog" />
-          <BlogCard title="A wardrobe with intention" image={ASSETS.blogFashion} to="/blog" />
-          <BlogCard title="Making space to reset" image={ASSETS.spaWater} to="/blog" />
-        </div>
-      </section>
       <Newsletter />
     </main>
   );
@@ -617,10 +606,6 @@ function HomePage() {
 
 function StandardItem({ icon, title, body }: { icon: string; title: string; body: string }) {
   return <div className="standard-item"><span className="material-symbols-outlined" aria-hidden="true">{icon}</span><h3>{title}</h3><p>{body}</p></div>;
-}
-
-function BlogCard({ title, image, to }: { title: string; image: string; to: string }) {
-  return <Link className="blog-card" to={to}><div className="blog-card-image"><img src={image} alt="" loading="lazy" decoding="async" /></div><h3>{title}</h3><span className="text-link">Read on the blog</span></Link>;
 }
 
 function Newsletter() {
@@ -944,15 +929,6 @@ function EnquiryPanel({ kind, title, intro }: { kind: "transfer" | "spa"; title:
 
 function AboutPage() {
   return <main id="main-content" tabIndex={-1}><PageHero title={<>A more thoughtful<br /><em>kind of luxury.</em></>} intro="Aura Studio brings together travel, personal style and wellbeing under one considered point of view." image={ASSETS.about} imageAlt="Architectural interior and considered natural materials" /><section className="feature-text section-pad"><div><h2>It is the feeling<br /><em>of being looked after.</em></h2></div><div><p>We believe quality is as much about how something makes you feel as it is about how it looks. That belief shapes every part of Aura Studio.</p><p>Each division has its own purpose, but they share the same standard: clarity, care and thoughtful attention to detail.</p></div></section><section className="values-grid"><StandardItem icon="01" title="Consideration" body="Every choice begins with the person on the other side of it." /><StandardItem icon="02" title="Consistency" body="A premium experience should feel considered at every touchpoint." /><StandardItem icon="03" title="Integrity" body="Clear promises, honest information and accountability." /><StandardItem icon="04" title="Respect" body="Your time, choices, privacy and wellbeing matter." /></section></main>;
-}
-
-function BlogPage() {
-  const entries = [
-    { category: "Travel", title: "The art of arriving well", body: "A few thoughts on calmer journeys and thoughtful details.", image: ASSETS.lifestyle },
-    { category: "Style", title: "A wardrobe with intention", body: "An introduction to a more considered approach to everyday dressing.", image: ASSETS.dress },
-    { category: "Wellbeing", title: "Making space to reset", body: "Why rest deserves a place in the rhythm of everyday life.", image: ASSETS.sustainability },
-  ];
-  return <main id="main-content" tabIndex={-1}><PageHero title={<>Notes on living<br /><em>well.</em></>} intro="Stories, observations and small reminders to move through life with a little more intention." /><section className="section-pad"><div className="blog-grid blog-grid-large">{entries.map((entry) => <article className="blog-card blog-card-static" key={entry.category}><div className="blog-card-image"><img src={entry.image} alt="" loading="lazy" /></div><h3>{entry.title}</h3><p>{entry.body}</p></article>)}</div><p className="catalogue-note">Blog articles are editorial placeholders and will be written and reviewed before publication.</p></section></main>;
 }
 
 type ContactValues = {
