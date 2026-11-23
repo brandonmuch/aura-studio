@@ -79,6 +79,22 @@ test("contact page uses the guided form and requires privacy acknowledgement", a
   await expect(page.getByText(/secure contact route will be connected before launch/)).toBeVisible();
 });
 
+test("homepage has three editorial campaign moments and Cape Town transfer messaging", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator(".home-hero")).toBeVisible();
+  await expect(page.locator(".home-campaign")).toHaveCount(2);
+  await expect(page.getByRole("heading", { name: "A wardrobe, considered." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Arrive well. Make room to reset." })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Cape Town airport transfers/ })).toHaveAttribute("href", "/transfers");
+});
+
+test("transfers page states the Cape Town-only airport transfer area", async ({ page }) => {
+  await page.goto("/transfers");
+  await expect(page.getByRole("heading", { name: "Arrive well. In Cape Town." })).toBeVisible();
+  await expect(page.getByText(/Airport transfers in Zimbabwe are not currently offered/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Plan your Cape Town transfer" })).toBeVisible();
+});
+
 test("homepage reflows on a narrow mobile viewport without horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
