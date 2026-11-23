@@ -105,7 +105,7 @@ test("homepage reflows on a narrow mobile viewport without horizontal overflow",
 
 test("transfer enquiry follows a guided flow and shows policy acknowledgement before completion", async ({ page }) => {
   await page.goto("/transfers");
-  await expect(page.getByRole("heading", { name: "Plan your journey" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Plan your Cape Town transfer" })).toBeVisible();
 
   await page.getByLabel("What should we call you?").fill("Taylor Example");
   await page.getByRole("button", { name: "Continue" }).click();
