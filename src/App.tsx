@@ -254,7 +254,7 @@ function Header() {
             <div className="search-panel-head"><span className="eyebrow">Search Aura</span><button className="icon-button" onClick={() => setSearchOpen(false)} aria-label="Close search">×</button></div>
             <input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="What are you looking for?" aria-label="Search query" />
             <div className="search-results">
-              {results.map((result) => <Link key={result.to} to={result.to}>{result.label}<span>↗</span></Link>)}
+              {results.map((result) => <Link key={result.to} to={result.to}>{result.label}</Link>)}
               {results.length === 0 && <p>No matching sections. Try transfers, clothing or spa.</p>}
             </div>
           </section>
@@ -274,7 +274,7 @@ function Footer({ onCookieSettings }: { onCookieSettings: () => void }) {
         </div>
         <div className="footer-column"><span className="footer-label">Explore</span><Link to="/transfers">Transfers</Link><Link to="/clothing">Clothing</Link><Link to="/spa">Spa</Link><Link to="/about">Our story</Link><Link to="/journal">Journal</Link></div>
         <div className="footer-column"><span className="footer-label">Support</span><Link to="/faq">FAQs</Link><Link to="/contact">Contact</Link><Link to="/policies/shipping">Shipping</Link><Link to="/policies/returns">Returns</Link><Link to="/policies/bookings">Bookings</Link></div>
-        <div className="footer-column footer-promise"><span className="footer-label">Our standard</span><p>Care in every interaction. Clarity in every commitment. Respect for your time, privacy and trust.</p><Link to="/trust">Trust & standards <span>↗</span></Link></div>
+        <div className="footer-column footer-promise"><span className="footer-label">Our standard</span><p>Care in every interaction. Clarity in every commitment. Respect for your time, privacy and trust.</p><Link to="/trust">Trust & standards</Link></div>
       </div>
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} Aura Studio. All rights reserved.</span>
@@ -309,9 +309,9 @@ function CookieConsent({ onManage }: { onManage: () => void }) {
     <aside className="cookie-banner" aria-label="Cookie preferences">
       <div><span className="eyebrow">Your privacy matters</span><p>We use necessary storage to make the site work. Optional analytics and marketing should stay off unless you choose to enable them.</p><Link to="/policies/cookies">Read the cookie policy</Link></div>
       <div className="cookie-actions">
-        <button className="button button-outline button-small" onClick={on>Manage</button>
-        <button className="button button-outline button-small" onClic> save({ necessary: true, analytics: false, marketing: false })}>Necessary only</button>
-        <button className="button button-dark button-small" onClic> save({ necessary: true, analytics: true, marketing: true })}>Accept all</button>
+        <button className="button button-outline button-small" onClick={onManage}>Manage</button>
+        <button className="button button-outline button-small" onClick={() => save({ necessary: true, analytics: false, marketing: false })}>Necessary only</button>
+        <button className="button button-dark button-small" onClick={() => save({ necessary: true, analytics: true, marketing: true })}>Accept all</button>
       </div>
     </aside>
   );
@@ -349,7 +349,7 @@ function CookiePreferences({ open, onClose }: { open: boolean; onClose: () => vo
         <PreferenceRow title="Necessary" description="Security, site functionality and saving this preference." checked disabled />
         <PreferenceRow title="Analytics" description="Helps us understand how the site is used." checked={analytics} onChange={setAnalytics} />
         <PreferenceRow title="Marketing" description="Supports advertising and campaign measurement." checked={marketing} onChange={setMarketing} />
-        <div className="modal-actions"><button className="button button-outline" onClic> { setAnalytics(false); setMarketing(false); window.localStorage.setItem("aura-cookie-choice", JSON.stringify({ necessary: true, analytics: false, marketing: false, savedAt: new Date().toISOString() })); onClose(); }}>Necessary only</button><button className="button button-dark" onClick>Save preferences</button></div>
+        <div className="modal-actions"><button className="button button-outline" onClick={() => { setAnalytics(false); setMarketing(false); window.localStorage.setItem("aura-cookie-choice", JSON.stringify({ necessary: true, analytics: false, marketing: false, savedAt: new Date().toISOString() })); onClose(); }}>Necessary only</button><button className="button button-dark" onClick={save}>Save preferences</button></div>
       </section>
     </div>
   );
@@ -408,7 +408,7 @@ function HomePage() {
           <span className="eyebrow">Aura Studio</span>
           <BlurText text="Luxury, without announcement." className="hero-title" delay={75} />
           <p>Considered clothing. Cape Town airport transfers. Restorative spa experiences.</p>
-          <Link className="button button-cream" to="/clot>Shop the collection</Link>
+          <Link className="button button-cream" to="/clothing">Shop the collection</Link>
         </div>
         <div className="hero-caption"><span>01 / 03</span><span>The Aura experience</span></div>
       </section>
@@ -420,7 +420,7 @@ function HomePage() {
           <span className="eyebrow">Aura Clothing · The collection</span>
           <h2 id="home-clothing-title">A wardrobe,<br />considered.</h2>
           <p>Pieces chosen with intention. An easier relationship with getting dressed.</p>
-          <Link className="button button-cream" to="/clot>Discover the collection</Link>
+          <Link className="button button-cream" to="/clothing">Discover the collection</Link>
         </div>
         <div className="home-campaign-caption"><span>02 / 03</span><span>Aura Clothing</span></div>
       </section>
@@ -432,7 +432,7 @@ function HomePage() {
             <h2 id="shop-feature-title">The clothing edit.</h2>
             <p>A first look at the pieces and silhouettes shaping the Aura wardrobe.</p>
           </div>
-          <Link className="text-link" to="/clothing">Explore all clothing <span>↗</span></Link>
+          <Link className="text-link" to="/clothing">Explore all clothing</Link>
         </div>
         <div className="shop-feature-grid">
           {products.map((product, index) => (
@@ -459,8 +459,8 @@ function HomePage() {
           <h2 id="home-experiences-title">Arrive well.<br />Make room to reset.</h2>
           <p>Thoughtful airport transfers in Cape Town, alongside restorative spa experiences.</p>
           <div className="home-campaign-actions">
-            <Link className="button button-cream" to="/trans>Cape Town airport transfers</Link>
-            <Link className="button button-outline-light" to=">Explore Aura Spa</Link>
+            <Link className="button button-cream" to="/transfers">Cape Town airport transfers</Link>
+            <Link className="button button-outline-light" to="/spa">Explore Aura Spa</Link>
           </div>
           <span className="home-campaign-location">Airport transfers available in Cape Town, South Africa only.</span>
         </div>
@@ -469,7 +469,7 @@ function HomePage() {
 
       <section className="story-split">
         <div className="story-image"><img src={ASSETS.mobileHero} alt="Editorial image from the website design template" loading="lazy" /></div>
-        <div className="story-copy"><span className="eyebrow">The Aura standard</span><h2>An elevated experience,<br /><em>in every detail.</em></h2><p>True luxury is not about excess. It is the feeling of being looked after, with care that is considered, consistent and quietly confident.</p><Link className="text-link" to="/about">Our story <span>↗</span></Link></div>
+        <div className="story-copy"><span className="eyebrow">The Aura standard</span><h2>An elevated experience,<br /><em>in every detail.</em></h2><p>True luxury is not about excess. It is the feeling of being looked after, with care that is considered, consistent and quietly confident.</p><Link className="text-link" to="/about">Our story</Link></div>
         <div className="standards-grid">
           <StandardItem icon="privacy_tip" title="Privacy first" body="Clear choices and respectful handling of personal information." />
           <StandardItem icon="credit_card" title="Secure payments" body="A hosted payment journey through a dedicated payment provider." />
@@ -479,7 +479,7 @@ function HomePage() {
       </section>
 
       <section className="journal-teaser section-pad">
-        <div className="section-head"><div><span className="eyebrow">The Journal</span><h2>Notes on living<br /><em>well.</em></h2></div><Link className="text-link" to="/journal">Read the journal <span>↗</span></Link></div>
+        <div className="section-head"><div><span className="eyebrow">The Journal</span><h2>Notes on living<br /><em>well.</em></h2></div><Link className="text-link" to="/journal">Read the journal</Link></div>
         <div className="journal-grid">
           <JournalCard category="Travel" title="The art of arriving well" image={ASSETS.lifestyle} to="/journal" />
           <JournalCard category="Style" title="A wardrobe with intention" image={ASSETS.dress} to="/journal" />
@@ -496,7 +496,7 @@ function StandardItem({ icon, title, body }: { icon: string; title: string; body
 }
 
 function JournalCard({ category, title, image, to }: { category: string; title: string; image: string; to: string }) {
-  return <Link className="journal-card" to={to}><div className="journal-card-image"><img src={image} alt="" loading="lazy" /></div><span className="eyebrow">{category}</span><h3>{title}</h3><span className="text-link">Coming to the journal <span>↗</span></span></Link>;
+  return <Link className="journal-card" to={to}><div className="journal-card-image"><img src={image} alt="" loading="lazy" /></div><span className="eyebrow">{category}</span><h3>{title}</h3><span className="text-link">Coming to the journal</span></Link>;
 }
 
 function Newsletter() {
@@ -585,7 +585,7 @@ function ClothingPage() {
                     <button
                       className="button button-dark product-card-add"
                       type="button"
-                      onClic> { addItem(product.slug); setAddedSlug(product.slug); }}
+                      onClick={() => { addItem(product.slug); setAddedSlug(product.slug); }}
                     >
                       Add to bag <span aria-hidden="true">+</span>
                     </button>
@@ -607,7 +607,7 @@ function ProductPage() {
   const navigate = useNavigate();
   const { addItem } = useCart();
   if (!product) return <NotFoundPage />;
-  return <main><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span><Link to="/clothing">Clothing</Link><span>/</span><span>{product.name}</span></div><section className="product-detail"><div className="product-detail-image"><img src={product.image} alt={product.note} /></div><div className="product-detail-copy"><span className="eyebrow">Aura Clothing</span><h1>{product.name}</h1><p className="product-description">{product.description}</p><div className="product-detail-rule" /><p className="product-price-pending">Price and product options will be displayed here.</p><p className="catalogue-note">This is a storefront preview. Final product details, size options, stock and prices are being prepared. Orders will open once the catalogue and secure checkout are connected.</p><button className="button button-dark" onClic> { addItem(product.slug); navigate("/cart"); }}>Add to bag</button></div></section></main>;
+  return <main><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span><Link to="/clothing">Clothing</Link><span>/</span><span>{product.name}</span></div><section className="product-detail"><div className="product-detail-image"><img src={product.image} alt={product.note} /></div><div className="product-detail-copy"><span className="eyebrow">Aura Clothing</span><h1>{product.name}</h1><p className="product-description">{product.description}</p><div className="product-detail-rule" /><p className="product-price-pending">Price and product options will be displayed here.</p><p className="catalogue-note">This is a storefront preview. Final product details, size options, stock and prices are being prepared. Orders will open once the catalogue and secure checkout are connected.</p><button className="button button-dark" onClick={() => { addItem(product.slug); navigate("/cart"); }}>Add to bag</button></div></section></main>;
 }
 
 function SpaPage() {
@@ -633,7 +633,7 @@ function SpaPage() {
           <span className="eyebrow">The Aura Spa collection</span>
           <h2>Thoughtful care.<br /><em>Distinct experiences.</em></h2>
           <p>Our spa collection will be presented as a curated menu rather than a generic list of local salon services. Each treatment will have its own character, with transparent details for guests arranging their visit in advance.</p>
-          <Link className="text-link" to="/policies/bookings">Booking and cancellation policy <span>↗</span></Link>
+          <Link className="text-link" to="/policies/bookings">Booking and cancellation policy</Link>
         </div>
       </section>
       <EnquiryPanel kind="spa" title="Plan your spa experience" intro="Tell us a little about your visit. We will make it easy to enquire about the right experience and preferred timing." />
@@ -803,7 +803,7 @@ function EnquiryPanel({ kind, title, intro }: { kind: "transfer" | "spa"; title:
 
               <div className="enquiry-step-actions">
                 <button className="enquiry-back" type="button" onClick={handleBack} disabled={step === 0}>Back</button>
-                <button className="button button-dark" type=">{step === steps.length - 1 ? "Complete enquiry preview" : "Continue"}</button>
+                <button className="button button-dark" type="submit">{step === steps.length - 1 ? "Complete enquiry preview" : "Continue"}</button>
               </div>
             </form>
           </>
@@ -965,7 +965,7 @@ function ContactFlow() {
             </div>
             <div className="enquiry-step-actions">
               <button className="enquiry-back" type="button" onClick={() => setStep((current) => Math.max(0, current - 1))} disabled={step === 0}>Back</button>
-              <button className="button button-dark" type=">{step === steps.length - 1 ? "Complete message preview" : "Continue"}</button>
+              <button className="button button-dark" type="submit">{step === steps.length - 1 ? "Complete message preview" : "Continue"}</button>
             </div>
           </form>
         </>
@@ -993,7 +993,7 @@ function FaqPage() {
 }
 
 function TrustPage() {
-  return <main><PageHero eyebrow="Trust & standards" title={<>Care is a practice.<br /><em>Not a promise.</em></>} intro="Aura is being designed around privacy, secure operations, accessible journeys and clear consumer information. These are build commitments, not claims of certification." /><section className="trust-grid section-pad"><TrustCard title="Privacy by design" copy="Collect only the information needed for the service, explain why it is needed, limit access and define retention." items={["Clear privacy notice","Purpose-limited collection","Optional consent controls","Documented retention and deletion"]} /><TrustCard title="Secure payment hand-off" copy="Use a hosted payment provider for card entry and verify payment confirmations server-side before marking an order as paid." items={["No card data stored by Aura","Hosted checkout","Server-side payment verification","Restricted secrets and access"]} /><TrustCard title="Consumer clarity" copy="Give customers the information needed to decide, review and correct an order before committing." items={["Full prices and charges","Clear delivery and booking details","Returns and cancellations","Support and complaint route"]} /><TrustCard title="Accessible experience" copy="Build towards WCAG 2.2 AA with accessible structure, focus states, keyboard use and reduced-motion support." items={["Semantic page structure","Visible keyboard focus","Form labels and error messages","Responsive, readable layouts"]} /></section><section className="trust-footnote"><p>Standards and laws are not interchangeable. Legal applicability depends on the markets served and the business's actual operations. The final policies, technical controls and supplier contracts must be reviewed before launch.</p><Link to="/policies/privacy" className="text-link">Read the privacy policy <span>↗</span></Link></section></main>;
+  return <main><PageHero eyebrow="Trust & standards" title={<>Care is a practice.<br /><em>Not a promise.</em></>} intro="Aura is being designed around privacy, secure operations, accessible journeys and clear consumer information. These are build commitments, not claims of certification." /><section className="trust-grid section-pad"><TrustCard title="Privacy by design" copy="Collect only the information needed for the service, explain why it is needed, limit access and define retention." items={["Clear privacy notice","Purpose-limited collection","Optional consent controls","Documented retention and deletion"]} /><TrustCard title="Secure payment hand-off" copy="Use a hosted payment provider for card entry and verify payment confirmations server-side before marking an order as paid." items={["No card data stored by Aura","Hosted checkout","Server-side payment verification","Restricted secrets and access"]} /><TrustCard title="Consumer clarity" copy="Give customers the information needed to decide, review and correct an order before committing." items={["Full prices and charges","Clear delivery and booking details","Returns and cancellations","Support and complaint route"]} /><TrustCard title="Accessible experience" copy="Build towards WCAG 2.2 AA with accessible structure, focus states, keyboard use and reduced-motion support." items={["Semantic page structure","Visible keyboard focus","Form labels and error messages","Responsive, readable layouts"]} /></section><section className="trust-footnote"><p>Standards and laws are not interchangeable. Legal applicability depends on the markets served and the business's actual operations. The final policies, technical controls and supplier contracts must be reviewed before launch.</p><Link to="/policies/privacy" className="text-link">Read the privacy policy</Link></section></main>;
 }
 
 function TrustCard({ title, copy, items }: { title: string; copy: string; items: string[] }) {
@@ -1008,7 +1008,7 @@ function CartPage() {
   const itemCount = cartProducts.reduce((total, line) => total + line.quantity, 0);
 
   if (cartProducts.length === 0) {
-    return <main className="empty-state section-pad"><span className="eyebrow">Your bag</span><h1>Your bag is empty.</h1><p>Explore the clothing collection and add pieces to your bag.</p><Link className="button button-dark" to="/clot>Shop clothing</Link></main>;
+    return <main className="empty-state section-pad"><span className="eyebrow">Your bag</span><h1>Your bag is empty.</h1><p>Explore the clothing collection and add pieces to your bag.</p><Link className="button button-dark" to="/clothing">Shop clothing</Link></main>;
   }
 
   return (
@@ -1037,14 +1037,14 @@ function CartPage() {
           <strong>{itemCount} {itemCount === 1 ? "item" : "items"} in your bag</strong>
           <p>Final prices, delivery and taxes will be shown before payment.</p>
         </div>
-        <Link className="button button-dark" to="/chec>Continue to checkout</Link>
+        <Link className="button button-dark" to="/checkout">Continue to checkout</Link>
       </div>
     </main>
   );
 }
 
 function CheckoutPage() {
-  return <main className="empty-state section-pad"><span className="eyebrow">Secure checkout</span><h1>Checkout is being prepared.</h1><p>Peach Payments will power the hosted card payment journey. Live checkout will be enabled once product prices, stock, delivery rules and server-side payment verification are configured.</p><Link className="button button-dark" to="/>Return to your bag</Link></main>;
+  return <main className="empty-state section-pad"><span className="eyebrow">Secure checkout</span><h1>Checkout is being prepared.</h1><p>Peach Payments will power the hosted card payment journey. Live checkout will be enabled once product prices, stock, delivery rules and server-side payment verification are configured.</p><Link className="button button-dark" to="/cart">Return to your bag</Link></main>;
 }
 
 function PolicyPage() {
@@ -1055,7 +1055,7 @@ function PolicyPage() {
 }
 
 function NotFoundPage() {
-  return <main className="empty-state section-pad"><span className="eyebrow">404 · Page not found</span><h1>Not this<br /><em>way.</em></h1><p>The page you are looking for may have moved.</p><Link className="button button-dark" t>Back to Aura</Link></main>;
+  return <main className="empty-state section-pad"><span className="eyebrow">404 · Page not found</span><h1>Not this<br /><em>way.</em></h1><p>The page you are looking for may have moved.</p><Link className="button button-dark" to="/">Back to Aura</Link></main>;
 }
 
 function App() {
