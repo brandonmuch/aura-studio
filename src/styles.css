@@ -11,7 +11,7 @@
   --cream: #ffffff;
   --paper: #f2f0e9;
   --taupe: #b8ad9c;
-  --muted: #77766d;
+  --muted: #55574f;
   --line: rgba(32, 33, 29, .18);
   --serif: "Cormorant Garamond", Georgia, serif;
   --sans: "DM Sans", Arial, sans-serif;
@@ -1414,4 +1414,34 @@ h1 em, h2 em, h3 em, h4 em, .hero-title em,
     transition-duration: .01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+
+/* WCAG 2.1 AA contrast refinements for secondary copy on light surfaces. */
+.catalogue-tools,
+.catalogue-note,
+.breadcrumbs,
+.product-card-meta p,
+.shop-feature-card-meta p,
+.shop-feature-head p,
+.shop-feature-note,
+.preference-row p,
+.enquiry-flow-top,
+.enquiry-hint,
+.field-optional,
+.service-detail-grid p,
+.spa-menu-copy > p,
+.values-grid .standard-item p,
+.contact-layout > div > p,
+.trust-card p,
+.trust-footnote p,
+.newsletter-section form > p,
+.product-detail-copy > p:not(.product-description):not(.catalogue-note),
+.policy-content p,
+.policy-draft-label {
+  color: #55574f;
+}
+.enquiry-step-content input::placeholder,
+.enquiry-step-content textarea::placeholder {
+  color: #625f56;
 }

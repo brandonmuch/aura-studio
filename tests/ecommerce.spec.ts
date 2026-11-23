@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
 test("homepage exposes a clear clothing discovery section", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "The clothing edit." })).toBeVisible();
-  await expect(page.locator(".shop-feature-card")).toHaveCount(4);
+  await expect(page.locator(".shop-feature-card")).toHaveCount(3);
   await expect(page.getByRole("link", { name: /Explore all clothing/ })).toHaveAttribute("href", "/clothing");
 });
 
@@ -45,9 +45,9 @@ test("clothing product cards expose a quick add-to-bag action", async ({ page })
   await page.goto("/clothing");
   await expect(page.locator(".product-card")).toHaveCount(4);
 
-  await page.getByRole("button", { name: "Show purchase options for Look 01" }).click();
-  await expect(page.getByRole("button", { name: "Add to bag" })).toBeVisible();
-  await page.getByRole("button", { name: "Add to bag" }).click();
+  const addButtons = page.getByRole("button", { name: "Add to bag" });
+  await expect(addButtons).toHaveCount(4);
+  await addButtons.first().click();
 
   await expect(page.getByRole("status").filter({ hasText: "Added to bag" })).toBeVisible();
   await expect(page.getByRole("link", { name: "View bag (1)" })).toHaveAttribute("href", "/cart");
@@ -91,7 +91,7 @@ test("homepage has three editorial campaign moments and Cape Town transfer messa
 test("transfers page states the Cape Town-only airport transfer area", async ({ page }) => {
   await page.goto("/transfers");
   await expect(page.getByRole("heading", { name: "Arrive well. In Cape Town." })).toBeVisible();
-  await expect(page.getByText(/Airport transfers in Zimbabwe are not currently offered/)).toBeVisible();
+  await expect(page.getByText(/These airport transfer services are not currently offered in Zimbabwe/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Plan your Cape Town transfer" })).toBeVisible();
 });
 

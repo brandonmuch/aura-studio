@@ -171,7 +171,7 @@ const policyContent: Record<string, { title: string; intro: string; sections: { 
     intro: "These terms are a launch draft. They must be checked against the final business structure, catalogue, booking model and jurisdictions before being made binding.",
     sections: [
       { heading: "The business", body: "The supplier is [insert registered legal name], trading as Aura Studio, with registration number [number], physical address [address], telephone [telephone] and email [email]. Complete these details before taking orders." },
-      { heading: "Product and service information", body: "Descriptions, sizes, availability, service locations and exclusions must be accurate and kept up to date. Any product images used for the final catalogue must represent the product being offered. Temporary template images must be replaced before real products are sold." },
+      { heading: "Product and service information", body: "Descriptions, sizes, availability, service locations and exclusions must be accurate and kept up to date. The editorial preview images shown on this site are not final product photography. Before sales open, product images must accurately represent each item being offered." },
       { heading: "Prices and payment", body: "The full price, applicable taxes, delivery or travel charges and any other fees must be shown before the customer commits. The order summary must allow the customer to review, correct or withdraw before submitting the order. Card payment is intended to be processed on the hosted page of the selected payment provider; Aura should not request card numbers or security codes directly." },
       { heading: "Orders and availability", body: "An order request is not accepted until Aura confirms acceptance and availability. The confirmation process, delivery estimate and any booking-specific conditions must be clearly communicated to the customer." },
       { heading: "Consumer rights and disputes", body: "Nothing in these terms is intended to exclude or limit a consumer right that cannot lawfully be excluded. Mandatory consumer protections in the customer's applicable jurisdiction take priority over inconsistent wording in these terms." },
@@ -584,7 +584,7 @@ function HomePage() {
           <h2 id="home-experiences-title">Arrive well.<br />Make room to reset.</h2>
           <p>Thoughtful transfers for selected journeys, alongside restorative spa experiences.</p>
           <div className="home-campaign-actions">
-            <Link className="button button-cream" to="/transfers">Explore transfers</Link>
+            <Link className="button button-cream" to="/transfers">Cape Town airport transfers</Link>
             <Link className="button button-outline-light" to="/spa">Explore Aura Spa</Link>
           </div>
           <span className="home-campaign-location">Selected airport transfer services are available in Cape Town, South Africa.</span>
@@ -632,7 +632,7 @@ function TransfersPage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        title={<>Arrive well.<br /><em>Travel with ease.</em></>}
+        title={<>Arrive well.<br /><em>In Cape Town.</em></>}
         intro="Private airport transfers for selected journeys in Cape Town, South Africa, arranged with care from arrival to drop-off."
         image={ASSETS.transferHero}
         imageAlt="Private executive vehicle prepared for a transfer"
@@ -643,7 +643,7 @@ function TransfersPage() {
           <h2>Good travel is felt<br /><em>before you arrive.</em></h2>
         </div>
         <div>
-          <p>The airport transfer services described on this page are available for selected journeys in Cape Town, South Africa. Availability depends on the route and service requested and will be confirmed before booking.</p>
+          <p>The airport transfer services described on this page are available for selected journeys in Cape Town, South Africa. Availability depends on the route and service requested and will be confirmed before booking. These airport transfer services are not currently offered in Zimbabwe.</p>
           <p>Share your flight and journey details so the requested pick-up can be reviewed and confirmed before you travel. Other Aura services have their own availability and locations.</p>
         </div>
       </section>
@@ -652,7 +652,7 @@ function TransfersPage() {
         <div><h3>Leave with ease.</h3><p>Arrange a Cape Town airport drop-off with the pick-up details and timing agreed in advance.</p></div>
         <div><h3>No surprises.</h3><p>Receive written confirmation of the route, agreed fare and any conditions before payment.</p></div>
       </section>
-      <EnquiryPanel kind="transfer" title="Plan your transfer" intro="Tell us a little about your flight and journey. We will take it one step at a time." />
+      <EnquiryPanel kind="transfer" title="Plan your Cape Town transfer" intro="Tell us a little about your flight and journey. We will take it one step at a time." />
     </main>
   );
 }
@@ -713,7 +713,7 @@ function ClothingPage() {
             );
           })}
         </div>
-        <p className="catalogue-note">The current images are temporary design references. Final product photography, descriptions, sizes, stock and prices will be loaded before orders open.</p>
+        <p className="catalogue-note">The images shown are editorial previews. Final product photography, descriptions, sizes, stock and prices will be confirmed before orders open.</p>
       </section>
     </main>
   );
