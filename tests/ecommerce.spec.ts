@@ -70,8 +70,11 @@ test("transfer enquiry follows a guided flow and shows policy acknowledgement be
   await page.getByRole("button", { name: "Continue" }).click();
 
   const acknowledgement = page.getByRole("checkbox", { name: /I have read the Privacy Policy/ });
-  await expect(acknowledgement).toBeRequired();
+  await expect(acknowledgement).toHaveAttribute("required", "");
   await expect(page.getByRole("link", { name: "Terms and Conditions" })).toHaveAttribute("href", "/policies/terms");
+  await page.getByRole("button", { name: "Complete enquiry preview" }).click();
+  await expect(page.getByText(/not connected to a live inbox/)).toHaveCount(0);
+  await acknowledgement.check();
   await page.getByRole("button", { name: "Complete enquiry preview" }).click();
   await expect(page.getByText(/not connected to a live inbox/)).toBeVisible();
 
