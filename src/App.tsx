@@ -923,7 +923,7 @@ function ContactFlow() {
                     <label htmlFor="contact-privacy">I have read the Privacy Policy and understand how my details will be used to respond to this message.</label>
                   </div>
                   <p className="enquiry-terms-note">
-                    Please read our <Link to="/policies/privacy">Privacy Policy</Link>. Any booking or purchase will be subject to the relevant <Link to="/policies/terms">Terms and Conditions</Link, which will be provided before you commit.
+                    Please read our <Link to="/policies/privacy">Privacy Policy</Link>. Any booking or purchase will be subject to the relevant <Link to="/policies/terms">Terms and Conditions</Link>, which will be provided before you commit.
                   </p>
                 </div>
               )}
