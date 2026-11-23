@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
 test("homepage exposes a clear clothing discovery section", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "The clothing edit." })).toBeVisible();
-  await expect(page.locator(".shop-feature-card")).toHaveCount(3);
+  await expect(page.locator(".shop-feature-card")).toHaveCount(4);
   await expect(page.getByRole("link", { name: /Explore all clothing/ })).toHaveAttribute("href", "/clothing");
 });
 
@@ -147,8 +147,8 @@ test("homepage clothing cards keep consistent framing and responsive alignment",
       const cards = Array.from(document.querySelectorAll<HTMLElement>(".shop-feature-card"));
       const images = Array.from(document.querySelectorAll<HTMLImageElement>(".shop-feature-image img"));
       const buttons = Array.from(document.querySelectorAll<HTMLElement>(".shop-feature-add"));
-      if (!grid || cards.length !== 3 || images.length !== 3 || buttons.length !== 3) {
-        throw new Error("The homepage clothing grid is missing expected card elements.");
+      if (!grid || cards.length !== 4 || images.length !== 4 || buttons.length !== 4) {
+        throw new Error("The homepage clothing grid is missing one or more of its four product cards.");
       }
       const gridBox = grid.getBoundingClientRect();
       const cardBoxes = cards.map((card) => {
@@ -177,20 +177,18 @@ test("homepage clothing cards keep consistent framing and responsive alignment",
     expect(layout.imageFits.every((fit) => fit === "contain")).toBe(true);
     expect(layout.buttonHeights.every((height) => height >= 44)).toBe(true);
     expect(layout.documentWidth - layout.viewportWidth).toBeLessThanOrEqual(1);
-    expect(layout.cards[0].width).toBeCloseTo(layout.cards[1].width, 0);
-
-    if (expectedColumns === 3) {
-      expect(layout.cards[0].actionTop).toBeCloseTo(layout.cards[1].actionTop, 0);
-      expect(layout.cards[1].actionTop).toBeCloseTo(layout.cards[2].actionTop, 0);
-    } else {
-      const lastCardCentre = layout.cards[2].left + layout.cards[2].width / 2;
-      const gridCentre = layout.gridLeft + layout.gridWidth / 2;
-      expect(lastCardCentre).toBeCloseTo(gridCentre, 0);
-      expect(Math.abs(layout.cards[2].width - layout.cards[0].width)).toBeLessThan(2);
+    for (const card of layout.cards.slice(1)) {
+      expect(Math.abs(card.width - layout.cards[0].width)).toBeLessThan(2);
+    }
+    for (let rowStart = 0; rowStart < layout.cards.length; rowStart += expectedColumns) {
+      const row = layout.cards.slice(rowStart, rowStart + expectedColumns);
+      for (const card of row.slice(1)) {
+        expect(card.actionTop).toBeCloseTo(row[0].actionTop, 0);
+      }
     }
   };
 
-  await inspectLayout(1440, 3);
+  await inspectLayout(1440, 4);
   await inspectLayout(820, 2);
   await inspectLayout(390, 2);
 });
