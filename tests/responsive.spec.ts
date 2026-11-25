@@ -147,3 +147,33 @@ test("homepage tagline is centred beneath the headline as part of the hero group
     expect(metrics.copy.width).toBeLessThan(metrics.group.width);
   }
 });
+
+
+test("Aura Spa menu presents all ten treatments with source durations and descriptions", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/spa");
+  const treatments = [
+    ["Zuri Waves of Africa", "90 mins"],
+    ["Imara Stone of the Mountain", "75 mins"],
+    ["Aura Soul of the Savanna", "90 mins"],
+    ["Naledi Dawn of the Desert", "60 mins"],
+    ["Kito Rain of Africa", "75 mins"],
+    ["Sefu Rhythms of the Drums", "105 mins"],
+    ["Chiku Earth of Africa", "90 mins"],
+    ["AURA Bloom Hands", "60 mins"],
+    ["Jengo Royal Feet", "75 mins"],
+    ["Lulu Mama Hands & Feet", "90 mins"],
+  ];
+  for (const [name, duration] of treatments) {
+    const treatment = page.locator(".spa-treatment").filter({ has: page.getByRole("heading", { name }) });
+    await expect(treatment).toHaveCount(1);
+    await expect(treatment).toContainText(duration);
+    await expect(treatment.locator(".spa-treatment-description")).not.toBeEmpty();
+  }
+  await expect(page.getByRole("heading", { name: "Signature massages." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Manicures & pedicures." })).toBeVisible();
+  await page.getByRole("heading", { name: "Plan your spa experience" }).scrollIntoViewIfNeeded();
+  await page.getByLabel("What kind of experience are you interested in?").click();
+  await expect(page.getByRole("option", { name: "Zuri Waves of Africa" })).toHaveCount(1);
+  await expect(page.getByRole("option", { name: "Lulu Mama Hands & Feet" })).toHaveCount(1);
+});

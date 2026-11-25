@@ -776,35 +776,85 @@ function ProductPage() {
   return <main id="main-content" tabIndex={-1}><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span><Link to="/clothing">Clothing</Link><span>/</span><span>{product.name}</span></div><section className="product-detail"><div className="product-detail-image"><img src={product.image} alt={product.note} /></div><div className="product-detail-copy"><h1>{product.name}</h1><p className="product-description">{product.description}</p><div className="product-detail-rule" /><p className="product-price-pending product-demo-price"><span>Demo price</span><strong>{product.demoPrice}</strong></p><p className="catalogue-note">This is a storefront preview. The price shown is a demo value for design review only. Final product details, size options, stock and retail prices are being prepared. Orders will open once the catalogue and secure checkout are connected.</p><button className="button button-dark" onClick={() => { addItem(product.slug); navigate("/cart"); }}>Add to bag</button></div></section></main>;
 }
 
+const spaMassages = [
+  { name: "Zuri Waves of Africa", duration: "90 mins", type: "Full Body Experience", description: "This treatment begins with a warm foot salt ritual, before a full body Aromatherapy massage. Afterwards the therapist will then apply heated herbal balls to your body in a rhythmic motion, echoing the sounds of the ocean and relieving tension throughout your body." },
+  { name: "Imara Stone of the Mountain", duration: "75 mins", type: "Full Body Experience", description: "This treatment begins with a warm towel back cleanse, followed by a deep tissue massage using heated African quartz stones. The slow, firm pressure melts tension in the shoulders, back and legs." },
+  { name: "Aura Soul of the Savanna", duration: "90 mins", type: "Full Body Experience", description: "This treatment begins with a rooibos and honey body polish, followed by a slow intuitive herbal oil massage. Warm compresses are placed on tired muscles to soothe the body and calm the mind." },
+  { name: "Naledi Dawn of the Desert", duration: "60 mins", type: "Full Body Experience", description: "This treatment begins with a citrus and buchu foot ritual, followed by a light, energising massage on the head, neck, shoulders and legs. Made to wake up the body and clear the mind." },
+  { name: "Kito Rain of Africa", duration: "75 mins", type: "Full Body Experience", description: "This treatment begins with a warm rain-mist body cleanse, followed by a gentle aromatherapy massage using Rwandan coffee and lemongrass oils. Slow strokes relieve stress and leave the skin soft and glowing." },
+  { name: "Sefu Rhythms of the Drums", duration: "105 mins", type: "Full Body Experience", description: "This treatment begins with a warm African potato foot soak, followed by a rhythmic four-hand style massage using warm seashells and marula oil. The flowing movements echo drumbeats and release tension throughout the body." },
+  { name: "Chiku Earth of Africa", duration: "90 mins", type: "Full Body Experience", description: "This treatment begins with a warm mud towel wrap on the back, followed by a grounding massage with spice island oils of clove, cinnamon and coconut. Deep, slow strokes leave you feeling rooted and rested." },
+];
+
+const spaHandsAndFeet = [
+  { name: "AURA Bloom Hands", duration: "60 mins", type: "Luxury Manicure", description: "This treatment begins with a warm African potato hand soak, followed by a sugar scrub, cuticle care and a shea butter hand massage. Finished with shaping and polish for soft, beautiful hands." },
+  { name: "Jengo Royal Feet", duration: "75 mins", type: "Luxury Pedicure", description: "This treatment begins with a warm herbal foot soak with sea salt, followed by a salt scrub, callus care and a hot stone foot massage. Finished with rich marula balm, shaping and polish." },
+  { name: "Lulu Mama Hands & Feet", duration: "90 mins", type: "Luxury Manicure & Pedicure", description: "This treatment begins with a gentle warm soak for hands and feet, followed by a soft scrub, cuticle care and a cooling leg and foot massage with shea balm. Finished with shaping and polish, made to pamper and nurture." },
+];
+
+function SpaTreatment({ treatment, index }: { treatment: { name: string; duration: string; type: string; description: string }; index: number }) {
+  return (
+    <article className="spa-treatment">
+      <div className="spa-treatment-top">
+        <span className="spa-treatment-number">{String(index).padStart(2, "0")}</span>
+        <span className="spa-treatment-duration">{treatment.duration}</span>
+      </div>
+      <h3>{treatment.name}</h3>
+      <p className="spa-treatment-type">{treatment.type}</p>
+      <p className="spa-treatment-description">{treatment.description}</p>
+    </article>
+  );
+}
+
 function SpaPage() {
   return (
-    <main id="main-content" tabIndex={-1}>
+    <main id="main-content" tabIndex={-1} className="spa-page">
       <PageHero
         title={<>A restorative<br /><em>destination.</em></>}
-        intro="A considered collection of spa and wellbeing experiences for international guests. Discover thoughtful care, take time to reset and make space for yourself while you travel."
+        intro="An African-inspired sanctuary of calm, rhythm and restoration."
         image={ASSETS.spaHero}
         imageAlt="Calm spa sanctuary with natural materials"
       />
-      <section className="feature-text section-pad">
-        <div><h2>Time well<br /><em>taken.</em></h2></div>
+      <section className="spa-introduction section-pad">
         <div>
-          <p>Aura Spa is being shaped for guests travelling from near and far, with a distinct treatment collection and a more considered approach to personal wellbeing.</p>
-          <p>The treatment menu will present each experience with a clear description, duration, price and practical details, so international guests can plan with confidence before they arrive.</p>
+          <p className="spa-introduction-label">Aura Spa</p>
+          <h2>Time well<br />taken.</h2>
+        </div>
+        <div className="spa-introduction-copy">
+          <p className="spa-introduction-lead">An African-inspired sanctuary of calm, rhythm and restoration.</p>
+          <p>Explore signature full-body massages alongside considered manicure and pedicure rituals. Each treatment draws on natural ingredients, warming techniques and thoughtful details.</p>
+          <p>Choose an experience below and enquire about availability. Treatment prices are not listed in the supplied menu, so the team can confirm pricing when responding to your enquiry.</p>
         </div>
       </section>
-      <section className="spa-menu-grid">
-        <div className="spa-menu-image"><img src={ASSETS.spaStill} alt="Ceramic objects and natural spa materials" loading="lazy" decoding="async" /></div>
-        <div className="spa-menu-copy">
-          
-          <h2>Thoughtful care.<br /><em>Distinct experiences.</em></h2>
-          <p>Our spa collection will be presented as a curated menu rather than a generic list of local salon services. Each treatment will have its own character, with transparent details for guests arranging their visit in advance.</p>
-          <Link className="text-link" to="/policies/bookings">Booking and cancellation policy</Link>
+      <section className="spa-treatment-section" aria-labelledby="spa-massage-title">
+        <div className="spa-treatment-heading">
+          <p>01 / Signature collection</p>
+          <h2 id="spa-massage-title">Signature<br />massages.</h2>
+          <span>Full body experiences</span>
+        </div>
+        <div className="spa-treatment-grid">
+          {spaMassages.map((treatment, index) => <SpaTreatment key={treatment.name} treatment={treatment} index={index + 1} />)}
         </div>
       </section>
-      <EnquiryPanel kind="spa" title="Plan your spa experience" intro="Tell us a little about your visit. We will make it easy to enquire about the right experience and preferred timing." />
+      <section className="spa-treatment-section spa-treatment-section--hands" aria-labelledby="spa-hands-title">
+        <div className="spa-treatment-heading">
+          <p>02 / Hands & feet</p>
+          <h2 id="spa-hands-title">Manicures<br />& pedicures.</h2>
+          <span>Care from hand to foot</span>
+        </div>
+        <div className="spa-treatment-grid spa-treatment-grid--three">
+          {spaHandsAndFeet.map((treatment, index) => <SpaTreatment key={treatment.name} treatment={treatment} index={index + 8} />)}
+        </div>
+      </section>
+      <section className="spa-menu-image-band" aria-label="Aura Spa atmosphere">
+        <img src={ASSETS.spaWater} alt="Water and natural stone details in a calm spa setting" loading="lazy" decoding="async" />
+        <div><h2>Make room<br />to restore.</h2><p>Choose your treatment and let us help plan your visit.</p></div>
+      </section>
+      <EnquiryPanel kind="spa" title="Plan your spa experience" intro="Tell us which treatment has caught your attention and when you would like to visit. We will confirm availability and pricing in our response." />
     </main>
   );
 }
+
 type EnquiryValues = {
   name: string;
   email: string;
@@ -917,8 +967,13 @@ function EnquiryPanel({ kind, title, intro }: { kind: "transfer" | "spa"; title:
                   <label htmlFor="enquiry-interest">What kind of experience are you interested in?
                     <select id="enquiry-interest" name="interest" autoFocus required value={values.interest} onChange={(event) => update("interest", event.target.value)}>
                       <option value="" disabled>Select an option</option>
-                      <option>Restorative treatment</option>
-                      <option>Wellbeing experience</option>
+                      <option>I'd like to discuss all treatments</option>
+                      <optgroup label="Signature massages">
+                        {spaMassages.map((treatment) => <option key={treatment.name}>{treatment.name}</option>)}
+                      </optgroup>
+                      <optgroup label="Manicures & pedicures">
+                        {spaHandsAndFeet.map((treatment) => <option key={treatment.name}>{treatment.name}</option>)}
+                      </optgroup>
                       <option>Not sure yet</option>
                     </select>
                   </label>

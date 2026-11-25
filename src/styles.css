@@ -3192,3 +3192,167 @@ html body i {
     padding: 0 !important;
   }
 }
+
+
+
+/* Aura Spa treatment menu */
+.spa-introduction {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(320px, 1fr);
+  gap: clamp(40px, 9vw, 140px);
+  align-items: end;
+  background: #f7f6f2;
+}
+.spa-introduction-label,
+.spa-treatment-heading > p {
+  margin: 0 0 20px;
+  color: #77786c;
+  font-size: 10px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.spa-introduction h2,
+.spa-treatment-heading h2,
+.spa-menu-image-band h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(52px, 6.5vw, 88px);
+  font-weight: 400;
+  line-height: .98;
+  letter-spacing: -.045em;
+}
+.spa-introduction-copy { max-width: 570px; }
+.spa-introduction-copy p {
+  margin: 0 0 17px;
+  color: #66665d;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.spa-introduction-copy .spa-introduction-lead {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.3vw, 30px);
+  line-height: 1.25;
+}
+.spa-treatment-section {
+  display: grid;
+  grid-template-columns: minmax(220px, .7fr) minmax(0, 1.6fr);
+  gap: clamp(36px, 7vw, 100px);
+  padding: clamp(76px, 9vw, 126px) clamp(24px, 7vw, 104px);
+  background: #eeece5;
+}
+.spa-treatment-section--hands { background: #f7f6f2; }
+.spa-treatment-heading { align-self: start; position: sticky; top: 110px; }
+.spa-treatment-heading h2 { font-size: clamp(42px, 4.8vw, 66px); }
+.spa-treatment-heading > span {
+  display: block;
+  margin-top: 18px;
+  color: #73746a;
+  font-size: 12px;
+}
+.spa-treatment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(24px, 4vw, 58px);
+  row-gap: 0;
+}
+.spa-treatment {
+  min-width: 0;
+  padding: 26px 0 32px;
+  border-top: 1px solid rgba(48, 49, 42, .22);
+}
+.spa-treatment-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  color: #74766b;
+  font-size: 10px;
+  letter-spacing: .06em;
+}
+.spa-treatment-number { font-variant-numeric: tabular-nums; }
+.spa-treatment-duration { color: #41443a; }
+.spa-treatment h3 {
+  margin: 0 0 9px;
+  font-family: var(--serif);
+  font-size: clamp(24px, 2.4vw, 33px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+.spa-treatment-type {
+  margin: 0 0 15px;
+  color: #77786c;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.spa-treatment-description {
+  max-width: 48ch;
+  margin: 0;
+  color: #62635b;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.spa-treatment-grid--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.spa-menu-image-band {
+  position: relative;
+  min-height: clamp(390px, 48vw, 620px);
+  overflow: hidden;
+  background: #33382e;
+  color: #fff;
+}
+.spa-menu-image-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(14, 17, 13, .66), rgba(14, 17, 13, .08));
+}
+.spa-menu-image-band img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.spa-menu-image-band > div {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: inherit;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(40px, 8vw, 110px);
+}
+.spa-menu-image-band h2 { max-width: 9ch; }
+.spa-menu-image-band p {
+  max-width: 34ch;
+  margin: 22px 0 0;
+  color: rgba(255,255,255,.88);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.spa-page .enquiry-section { background: #e8e5dc; }
+@media (max-width: 900px) {
+  .spa-treatment-section {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+  .spa-treatment-heading { position: static; }
+  .spa-treatment-grid--three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .spa-introduction {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .spa-introduction h2 { font-size: 58px; }
+  .spa-treatment-section { padding: 70px 7%; }
+  .spa-treatment-grid,
+  .spa-treatment-grid--three { grid-template-columns: 1fr; }
+  .spa-treatment { padding: 23px 0 27px; }
+  .spa-treatment h3 { font-size: 29px; }
+  .spa-menu-image-band { min-height: 430px; }
+  .spa-menu-image-band > div { padding: 52px 8%; }
+}
